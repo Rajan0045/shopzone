@@ -1,0 +1,220 @@
+* {
+  box-sizing: border-box;
+}
+
+/* NAVBAR */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  width: 100%;
+
+  background: #131921;
+  color: white;
+
+  padding: 12px 24px;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* TOP */
+
+.navbar-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* LOGO */
+
+.logo {
+  margin: 0;
+
+  color: #ff9900;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+/* SEARCH */
+
+.search-wrapper {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+
+  padding: 12px 18px;
+
+  border: none;
+  outline: none;
+
+  border-radius: 12px;
+
+  font-size: 15px;
+}
+
+.cart-icon-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -10px;
+  right: -14px;
+
+  min-width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ef4444;
+  color: white;
+
+  border-radius: 50%;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  padding: 2px 6px;
+
+  box-shadow:
+    0 4px 10px rgba(239, 68, 68, 0.35);
+}
+
+/* DESKTOP LINKS */
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: #ff9900;
+}
+
+/* MENU BUTTON */
+
+.menu-btn {
+  display: none;
+
+  background: transparent;
+  border: none;
+
+  color: white;
+
+  font-size: 28px;
+
+  cursor: pointer;
+}
+
+/* MOBILE MENU */
+
+.mobile-menu {
+  display: none;
+}
+
+/* TABLET */
+
+@media screen and (max-width: 992px) {
+  .navbar {
+    padding: 12px 18px;
+  }
+
+  .desktop-nav {
+    gap: 18px;
+  }
+}
+
+/* MOBILE */
+
+@media screen and (max-width: 768px) {
+  .navbar-top {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .logo {
+    font-size: 26px;
+  }
+
+  .search-wrapper {
+    order: 3;
+    width: 100%;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-btn {
+    display: block;
+    margin-left: auto;
+  }
+
+  .mobile-menu {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-top: 14px;
+
+    padding: 18px;
+
+    background: #1f2937;
+
+    border-radius: 14px;
+
+    animation: slideDown 0.3s ease;
+  }
+
+  .mobile-link {
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mobile-link:hover {
+    color: #ff9900;
+  }
+}
+
+/* ANIMATION */
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
