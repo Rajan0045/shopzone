@@ -1,8 +1,8 @@
-import {  BrowserRouter,  Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./screens/Home";
 import Orders from "./screens/Orders";
 import Cart from "./screens/Cart";
-import Navbar from "./components/navbar.jsx";
+import NavBar from "./screens/NavBar";
 
 
 function App() {
@@ -10,12 +10,12 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <Navbar />
+        <NavBar />
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route    path="/orders" element={<Orders />}/>
-            <Route    path="/cart" element={<Cart  />}/>
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
         </main>
       </div>

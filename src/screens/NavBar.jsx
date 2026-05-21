@@ -8,7 +8,7 @@ import {
 
 import "../screens/styes/navbar.css";
 
-const Navbar = () => {
+const NavBar = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -136,4 +136,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;
