@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import "./styles/navbar.css";
+import "./styles/navBar.css";
 import {
   setSearch,
 } from "../redux/features/products/productSlice";
