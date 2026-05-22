@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setSearch,
 } from "../redux/features/products/productSlice";
-import "./styes/navbar.css"
+import "./styles/navbar.css"
 
 const NavBar = () => {
   const navigate = useNavigate();

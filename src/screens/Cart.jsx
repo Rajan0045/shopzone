@@ -1,4 +1,4 @@
-import "./styes/cart.css";
+import "./styles/cart.css";
 
 import { useDispatch, useSelector } from "react-redux";
 

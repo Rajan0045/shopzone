@@ -1,4 +1,4 @@
-import "./styes/home.css";
+import "./styles/home.css";
 import {
   useDispatch,
   useSelector,
