@@ -46,13 +46,27 @@ function ProductDetails() {
         {/* LEFT */}
 
         <div className="details-left">
+
           <div className="main-image-wrapper">
+
+            {/* DISCOUNT BADGE */}
+
+            <div className="details-discount-badge">
+              -
+              {Math.round(
+                product.discountPercentage
+              )}
+              %
+            </div>
+
             <img
               src={mainImage}
               alt={product.title}
               className="main-image"
             />
           </div>
+
+          {/* THUMBNAILS */}
 
           <div className="thumbnail-row">
             {product.images?.map((img, index) => (
@@ -84,6 +98,7 @@ function ProductDetails() {
           </h1>
 
           <div className="rating-stock-row">
+
             <span className="details-rating">
               ⭐ {product.rating}
             </span>
@@ -91,9 +106,11 @@ function ProductDetails() {
             <span className="details-stock">
               {product.stock} Items Left
             </span>
+
           </div>
 
           <div className="price-row">
+
             <span className="details-price">
               ${product.price}
             </span>
@@ -114,6 +131,7 @@ function ProductDetails() {
               )}
               % OFF
             </span>
+
           </div>
 
           <p className="details-description">
@@ -121,18 +139,27 @@ function ProductDetails() {
           </p>
 
           <div className="extra-info">
+
             <div>
               <strong>Category:</strong>{" "}
               {product.category}
             </div>
 
             <div>
-              <strong>Warranty:</strong> 1 Year
+              <strong>Warranty:</strong>{" "}
+              1 Year Warranty
             </div>
 
             <div>
-              <strong>Delivery:</strong> Free Delivery
+              <strong>Delivery:</strong>{" "}
+              Free Delivery
             </div>
+
+            <div>
+              <strong>Return Policy:</strong>{" "}
+              7 Days Replacement
+            </div>
+
           </div>
 
           {alreadyAdded ? (
