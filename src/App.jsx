@@ -3,6 +3,7 @@ import Home from "./screens/Home";
 import Orders from "./screens/Orders";
 import Cart from "./screens/Cart";
 import NavBar from "./screens/NavBar";
+import ProductDetails from "./screens/ProductDetails";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
           </Routes>
         </main>
       </div>

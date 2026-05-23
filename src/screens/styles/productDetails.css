@@ -1,0 +1,163 @@
+.details-container {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 40px 20px;
+}
+
+.details-card {
+  max-width: 1200px;
+  margin: auto;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  gap: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.details-left {
+  flex: 1;
+}
+
+.main-image-wrapper {
+  background: #f8f8f8;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.main-image {
+  width: 100%;
+  height: 450px;
+  object-fit: contain;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.thumb-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.active-thumb {
+  border-color: black;
+}
+
+.details-right {
+  flex: 1;
+}
+
+.details-brand {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.details-title {
+    color: #333333;
+  font-size: 38px;
+  margin-bottom: 20px;
+}
+
+.rating-stock-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.details-rating,
+.details-stock {
+  background: #f3f3f3;
+  padding: 8px 14px;
+  border-radius: 30px;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.details-price {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.details-old-price {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 22px;
+}
+
+.discount-pill {
+  background: #e53935;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: 14px;
+}
+
+.details-description {
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.extra-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.add-cart-btn,
+.added-cart-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-cart-btn {
+  background: black;
+  color: white;
+}
+
+.added-cart-btn {
+  background: #2e7d32;
+  color: white;
+}
+
+.details-loader {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .details-card {
+    flex-direction: column;
+  }
+
+  .main-image {
+    height: 300px;
+  }
+
+  .details-title {
+    font-size: 28px;
+  }
+}

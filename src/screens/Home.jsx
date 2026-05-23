@@ -6,12 +6,14 @@ import {
 import { useEffect, useRef } from "react";
 import { fetchProducts, setCurrentPage } from "../redux/features/products/productSlice";
 import { addToCart } from "../redux/features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 
 function Home() {
 
   const dispatch = useDispatch();
   const productsRef = useRef(null);
+  const navigate = useNavigate();
 
   const {
     products,
@@ -24,8 +26,8 @@ function Home() {
     (state) => state.products
   );
   const cartItems = useSelector(
-  (state) => state.cart.cartItems
-);
+    (state) => state.cart.cartItems
+  );
 
   /* FETCH PRODUCTS */
 
@@ -101,6 +103,7 @@ function Home() {
           <div
             key={item.id}
             className="card"
+            onClick={() => navigate(`/product/${item.id}`)}
           >
             {/* BADGE */}
 
