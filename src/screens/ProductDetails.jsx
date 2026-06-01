@@ -1,5 +1,5 @@
 import "./styles/productDetails.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/features/cart/cartSlice";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ function ProductDetails() {
   const { id } = useParams();
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState("");
@@ -165,8 +165,8 @@ function ProductDetails() {
             </div>
 
             {alreadyAdded ? (
-              <button className="added-cart-btn">
-                Added To Cart ✓
+              <button className="added-cart-btn" onClick={()=>navigate("/cart")}>
+                View Cart ✓
               </button>
             ) : (
               <button
