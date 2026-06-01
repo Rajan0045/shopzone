@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./styles/navBar.css";
 import {
@@ -8,7 +8,7 @@ import {
 
 const NavBar = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const dispatch = useDispatch();
   const cartItems = useSelector(
     (state) => state.cart.cartItems
@@ -18,9 +18,9 @@ const NavBar = () => {
   );
 
   const totalQuantity = cartItems.reduce(
-  (total, item) => total + item.quantity,
-  0
-);
+    (total, item) => total + item.quantity,
+    0
+  );
 
   const [menuOpen, setMenuOpen] =
     useState(false);
@@ -38,19 +38,19 @@ const NavBar = () => {
         </h2>
 
         {/* SEARCH */}
-        <div className="search-wrapper">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="search-input"
-            value={search}
-            onChange={(e) =>
-              dispatch(
-                setSearch(e.target.value)
-              )
-            }
-          />
-        </div>
+        {location.pathname === "/" ? (
+          <div className="search-wrapper">
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="search-input"
+              value={search}
+              onChange={(e) =>
+                dispatch(setSearch(e.target.value))
+              }
+            />
+          </div>
+        ): <div className="search-wrapper" />}
 
         {/* DESKTOP LINKS */}
         <div className="nav-links desktop-nav">
