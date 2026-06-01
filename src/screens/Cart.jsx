@@ -6,10 +6,11 @@ import {
   removeFromCart,
   clearCart,
 } from "../redux/features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
-
+const navigate = useNavigate();
   const cartItems = useSelector(
     (state) => state.cart.cartItems
   );
@@ -38,6 +39,7 @@ const Cart = () => {
       handler: function (response) {
         console.log("Payment Success:", response);
         dispatch(clearCart());
+        navigate("/");
       },
       prefill: {
         name: "Customer",
