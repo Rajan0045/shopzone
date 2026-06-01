@@ -1,4 +1,5 @@
 import React from "react";
+import NavBar from "./NavBar";
 
 const orders = [
   {
@@ -32,78 +33,81 @@ const orders = [
 
 const Orders = () => {
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <h1 style={styles.heading}>My Orders</h1>
+    <>
+      <NavBar />
+      <div style={styles.container}>
+        {/* Header */}
+        <div style={styles.header}>
+          <h1 style={styles.heading}>My Orders</h1>
 
-        <p style={styles.subText}>
-          Track and manage your purchases
-        </p>
-      </div>
+          <p style={styles.subText}>
+            Track and manage your purchases
+          </p>
+        </div>
 
-      {/* Orders */}
-      <div style={styles.ordersWrapper}>
-        {orders.map((item) => (
-          <div key={item.id} style={styles.card}>
-            {/* Left Section */}
-            <div style={styles.leftSection}>
-              <img
-                src={item.image}
-                alt={item.product}
-                style={styles.image}
-              />
+        {/* Orders */}
+        <div style={styles.ordersWrapper}>
+          {orders.map((item) => (
+            <div key={item.id} style={styles.card}>
+              {/* Left Section */}
+              <div style={styles.leftSection}>
+                <img
+                  src={item.image}
+                  alt={item.product}
+                  style={styles.image}
+                />
 
-              <div style={styles.info}>
-                <h3 style={styles.productName}>
-                  {item.product}
-                </h3>
+                <div style={styles.info}>
+                  <h3 style={styles.productName}>
+                    {item.product}
+                  </h3>
 
-                <p style={styles.orderId}>
-                  {item.id}
-                </p>
+                  <p style={styles.orderId}>
+                    {item.id}
+                  </p>
 
-                <p style={styles.date}>
-                  Ordered on {item.date}
-                </p>
+                  <p style={styles.date}>
+                    Ordered on {item.date}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Section */}
+              <div style={styles.rightSection}>
+                <h2 style={styles.price}>
+                  {item.price}
+                </h2>
+
+                <span
+                  style={{
+                    ...styles.status,
+                    backgroundColor:
+                      item.status === "Delivered"
+                        ? "#dcfce7"
+                        : item.status === "Shipped"
+                          ? "#dbeafe"
+                          : "#fef9c3",
+
+                    color:
+                      item.status === "Delivered"
+                        ? "#166534"
+                        : item.status === "Shipped"
+                          ? "#1d4ed8"
+                          : "#854d0e",
+                  }}
+                >
+                  {item.status}
+                </span>
+
+                <button style={styles.button}>
+                  View Details
+                </button>
               </div>
             </div>
-
-            {/* Right Section */}
-            <div style={styles.rightSection}>
-              <h2 style={styles.price}>
-                {item.price}
-              </h2>
-
-              <span
-                style={{
-                  ...styles.status,
-                  backgroundColor:
-                    item.status === "Delivered"
-                      ? "#dcfce7"
-                      : item.status === "Shipped"
-                      ? "#dbeafe"
-                      : "#fef9c3",
-
-                  color:
-                    item.status === "Delivered"
-                      ? "#166534"
-                      : item.status === "Shipped"
-                      ? "#1d4ed8"
-                      : "#854d0e",
-                }}
-              >
-                {item.status}
-              </span>
-
-              <button style={styles.button}>
-                View Details
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

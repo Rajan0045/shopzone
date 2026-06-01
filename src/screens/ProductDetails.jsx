@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/features/cart/cartSlice";
 import { useEffect, useState } from "react";
+import NavBar from "./NavBar";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -40,145 +41,147 @@ function ProductDetails() {
   );
 
   return (
-    <div className="details-container">
-      <div className="details-card">
+    <>
+      <NavBar />
+      <div className="details-container">
+        <div className="details-card">
 
-        {/* LEFT */}
+          {/* LEFT */}
 
-        <div className="details-left">
+          <div className="details-left">
 
-          <div className="main-image-wrapper">
+            <div className="main-image-wrapper">
 
-            {/* DISCOUNT BADGE */}
+              {/* DISCOUNT BADGE */}
 
-            <div className="details-discount-badge">
-              -
-              {Math.round(
-                product.discountPercentage
-              )}
-              %
+              <div className="details-discount-badge">
+                -
+                {Math.round(
+                  product.discountPercentage
+                )}
+                %
+              </div>
+
+              <img
+                src={mainImage}
+                alt={product.title}
+                className="main-image"
+              />
             </div>
 
-            <img
-              src={mainImage}
-              alt={product.title}
-              className="main-image"
-            />
+            {/* THUMBNAILS */}
+
+            <div className="thumbnail-row">
+              {product.images?.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt="thumb"
+                  className={`thumb-image ${mainImage === img
+                      ? "active-thumb"
+                      : ""
+                    }`}
+                  onClick={() => setMainImage(img)}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* THUMBNAILS */}
+          {/* RIGHT */}
 
-          <div className="thumbnail-row">
-            {product.images?.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt="thumb"
-                className={`thumb-image ${
-                  mainImage === img
-                    ? "active-thumb"
-                    : ""
-                }`}
-                onClick={() => setMainImage(img)}
-              />
-            ))}
-          </div>
-        </div>
+          <div className="details-right">
 
-        {/* RIGHT */}
+            <p className="details-brand">
+              {product.brand}
+            </p>
 
-        <div className="details-right">
+            <h1 className="details-title">
+              {product.title}
+            </h1>
 
-          <p className="details-brand">
-            {product.brand}
-          </p>
+            <div className="rating-stock-row">
 
-          <h1 className="details-title">
-            {product.title}
-          </h1>
+              <span className="details-rating">
+                ⭐ {product.rating}
+              </span>
 
-          <div className="rating-stock-row">
+              <span className="details-stock">
+                {product.stock} Items Left
+              </span>
 
-            <span className="details-rating">
-              ⭐ {product.rating}
-            </span>
+            </div>
 
-            <span className="details-stock">
-              {product.stock} Items Left
-            </span>
+            <div className="price-row">
 
-          </div>
+              <span className="details-price">
+                ${product.price}
+              </span>
 
-          <div className="price-row">
-
-            <span className="details-price">
-              ${product.price}
-            </span>
-
-            <span className="details-old-price">
-              $
-              {(
-                product.price +
-                product.price *
+              <span className="details-old-price">
+                $
+                {(
+                  product.price +
+                  product.price *
                   (product.discountPercentage /
                     100)
-              ).toFixed(0)}
-            </span>
+                ).toFixed(0)}
+              </span>
 
-            <span className="discount-pill">
-              {Math.round(
-                product.discountPercentage
-              )}
-              % OFF
-            </span>
+              <span className="discount-pill">
+                {Math.round(
+                  product.discountPercentage
+                )}
+                % OFF
+              </span>
 
+            </div>
+
+            <p className="details-description">
+              {product.description}
+            </p>
+
+            <div className="extra-info">
+
+              <div>
+                <strong>Category:</strong>{" "}
+                {product.category}
+              </div>
+
+              <div>
+                <strong>Warranty:</strong>{" "}
+                1 Year Warranty
+              </div>
+
+              <div>
+                <strong>Delivery:</strong>{" "}
+                Free Delivery
+              </div>
+
+              <div>
+                <strong>Return Policy:</strong>{" "}
+                7 Days Replacement
+              </div>
+
+            </div>
+
+            {alreadyAdded ? (
+              <button className="added-cart-btn">
+                Added To Cart ✓
+              </button>
+            ) : (
+              <button
+                className="add-cart-btn"
+                onClick={() =>
+                  dispatch(addToCart(product))
+                }
+              >
+                Add To Cart
+              </button>
+            )}
           </div>
-
-          <p className="details-description">
-            {product.description}
-          </p>
-
-          <div className="extra-info">
-
-            <div>
-              <strong>Category:</strong>{" "}
-              {product.category}
-            </div>
-
-            <div>
-              <strong>Warranty:</strong>{" "}
-              1 Year Warranty
-            </div>
-
-            <div>
-              <strong>Delivery:</strong>{" "}
-              Free Delivery
-            </div>
-
-            <div>
-              <strong>Return Policy:</strong>{" "}
-              7 Days Replacement
-            </div>
-
-          </div>
-
-          {alreadyAdded ? (
-            <button className="added-cart-btn">
-              Added To Cart ✓
-            </button>
-          ) : (
-            <button
-              className="add-cart-btn"
-              onClick={() =>
-                dispatch(addToCart(product))
-              }
-            >
-              Add To Cart
-            </button>
-          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

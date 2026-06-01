@@ -6,7 +6,7 @@ import {
   setSearch,
 } from "../redux/features/products/productSlice";
 
-const NavBar = () => {
+const NavBar = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -48,6 +48,9 @@ const NavBar = () => {
               onChange={(e) =>
                 dispatch(setSearch(e.target.value))
               }
+              onFocus={()=> props?.productsRef.current?.scrollIntoView({
+              behavior: "smooth",
+            })}
             />
           </div>
         ): <div className="search-wrapper" />}

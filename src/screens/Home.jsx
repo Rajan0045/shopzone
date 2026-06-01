@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { fetchProducts, setCurrentPage } from "../redux/features/products/productSlice";
 import { addToCart } from "../redux/features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
+import NavBar from './NavBar';
 
 
 function Home() {
@@ -59,7 +60,7 @@ function Home() {
   return (
     <div className="home-container">
       {/* HERO */}
-
+      <NavBar productsRef={productsRef} />
       <div className="hero">
         <div className="hero-overlay"></div>
 

@@ -7,10 +7,11 @@ import {
   clearCart,
 } from "../redux/features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
+import NavBar from "./NavBar";
 
 const Cart = () => {
   const dispatch = useDispatch();
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const cartItems = useSelector(
     (state) => state.cart.cartItems
   );
@@ -57,14 +58,14 @@ const navigate = useNavigate();
     };
 
     const razorpay = new window.Razorpay(options);
-
     razorpay.open();
   };
 
   return (
+    <>
+    <NavBar />
     <div className="cart-container">
       {/* HEADER */}
-
       <div className="cart-header">
         <h1 className="cart-heading">
           My Cart
@@ -233,6 +234,7 @@ const navigate = useNavigate();
         </div>
       )}
     </div>
+    </>
   );
 };
 
