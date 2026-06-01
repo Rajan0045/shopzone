@@ -22,8 +22,16 @@ const NavBar = (props) => {
     0
   );
 
-  const [menuOpen, setMenuOpen] =
-    useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = (e) => {
+    setIsSearching(true);
+    dispatch(setSearch(e.target.value));
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 500); // simulate search delay
+  };
 
   return (
     <nav className="navbar">
@@ -45,15 +53,19 @@ const NavBar = (props) => {
               placeholder="Search products..."
               className="search-input"
               value={search}
-              onChange={(e) =>
-                dispatch(setSearch(e.target.value))
+              onChange={handleSearch}
+              onFocus={() =>
+                props?.productsRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                })
               }
-              onFocus={()=> props?.productsRef.current?.scrollIntoView({
-              behavior: "smooth",
-            })}
             />
+
+            {isSearching && (
+              <div className="search-spinner"></div>
+            )}
           </div>
-        ): <div className="search-wrapper" />}
+        ) : <div className="search-wrapper" />}
 
         {/* DESKTOP LINKS */}
         <div className="nav-links desktop-nav">

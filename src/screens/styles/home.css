@@ -35,15 +35,39 @@
   max-width: 600px;
 }
 
-.discount-badge{
+.no-products {
+  text-align: center;
+  padding: 80px 20px;
+  margin: 40px auto;
+}
+
+.no-products-icon {
+  font-size: 70px;
+  margin-bottom: 16px;
+}
+
+.no-products h2 {
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+.no-products p {
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.discount-badge {
   position: absolute;
   top: 18px;
   left: 18px;
-  background: linear-gradient(
-    to right,
-    #ef4444,
-    #dc2626
-  );
+  background: linear-gradient(to right,
+      #ef4444,
+      #dc2626);
   color: white;
   padding: 6px 12px;
   border-radius: 30px;
@@ -112,7 +136,7 @@
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   transition: 0.3s;
-    position: relative;
+  position: relative;
 }
 
 .card:hover {
