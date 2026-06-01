@@ -1,11 +1,10 @@
 import "./styles/cart.css";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   increaseQuantity,
   decreaseQuantity,
   removeFromCart,
+  clearCart,
 } from "../redux/features/cart/cartSlice";
 
 const Cart = () => {
@@ -15,18 +14,50 @@ const Cart = () => {
     (state) => state.cart.cartItems
   );
 
-  /* CALCULATIONS */
-
   const subtotal = cartItems.reduce(
     (total, item) =>
       total + item.price * item.quantity,
     0
   );
 
-  const shipping =
-    subtotal > 0 ? 20 : 0;
+  const shipping = subtotal > 0 ? 20 : 0;
 
   const total = subtotal + shipping;
+
+  const handlePayment = () => {
+    if (!window.Razorpay) {
+      alert("Razorpay SDK failed to load");
+      return;
+    }
+    const options = {
+      key: "rzp_test_SwN1CwWS0vHIri",
+      amount: Math.round(total * 100),
+      currency: "INR",
+      name: "My Store",
+      description: "Cart Payment",
+      handler: function (response) {
+        console.log("Payment Success:", response);
+        dispatch(clearCart());
+      },
+      prefill: {
+        name: "Customer",
+        email: "customer@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+      modal: {
+        ondismiss: function () {
+          console.log("Payment cancelled");
+        },
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+
+    razorpay.open();
+  };
 
   return (
     <div className="cart-container">
@@ -190,8 +221,10 @@ const Cart = () => {
                 ${total.toFixed(2)}
               </span>
             </div>
-
-            <button className="checkout-btn">
+            <button
+              className="checkout-btn"
+              onClick={handlePayment}
+            >
               Proceed To Checkout
             </button>
           </div>
