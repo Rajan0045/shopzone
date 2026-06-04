@@ -8,7 +8,8 @@ import { fetchProducts, setCurrentPage } from "../redux/features/products/produc
 import { addToCart } from "../redux/features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 import NavBar from './NavBar';
-
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function Home() {
 
@@ -56,6 +57,40 @@ function Home() {
     total / limit
   );
 
+  function ProductSkeleton() {
+    return (
+      <div className="card">
+        <div className="image-wrapper">
+          <Skeleton height={220} />
+        </div>
+
+        <div className="card-body">
+          <p className="brand">
+            <Skeleton width={80} />
+          </p>
+
+          <h3 className="product-title">
+            <Skeleton height={25} />
+          </h3>
+
+          <p className="description">
+            <Skeleton count={2} />
+          </p>
+
+          <div className="top-row">
+            <Skeleton width={60} />
+            <Skeleton width={60} />
+          </div>
+
+          <div className="footer">
+            <Skeleton width={80} />
+            <Skeleton width={70} height={35} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="home-container">
@@ -101,9 +136,11 @@ function Home() {
 
       <div className="grid">
         {loading ? (
-          <div className="loading-container">
-            <h3>Loading products...</h3>
-          </div>
+          <>
+            {[...Array(8)].map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))}
+          </>
         ) : !products || products.length === 0 ? (
           <div className="no-products">
             <div className="no-products-icon">🔍</div>
@@ -113,104 +150,94 @@ function Home() {
             </p>
           </div>
         ) : (
-          <div className="grid">
-            {products.map((item) => (
-              <div
-                key={item.id}
-                className="card"
-                onClick={() => navigate(`/product/${item.id}`)}
-              >
-                {/* BADGE */}
+          products.map((item) => (
+            <div
+              key={item.id}
+              className="card"
+              onClick={() =>
+                navigate(`/product/${item.id}`)
+              }
+            >
+              {/* BADGE */}
+              <div className="discount-badge">
+                -{Math.round(item.discountPercentage)}%
+              </div>
 
-                <div className="discount-badge">
-                  -
-                  {Math.round(
-                    item.discountPercentage
+              {/* IMAGE */}
+              <div className="image-wrapper">
+                <img
+                  src={item.thumbnail}
+                  alt={item.title}
+                  className="product-image"
+                />
+              </div>
+
+              {/* BODY */}
+              <div className="card-body">
+                <p className="brand">
+                  {item.brand}
+                </p>
+
+                <h3 className="product-title">
+                  {item.title}
+                </h3>
+
+                <p className="description">
+                  {item.description.slice(0, 85)}
+                  ...
+                </p>
+
+                {/* TOP */}
+                <div className="top-row">
+                  <span className="rating">
+                    ⭐ {item.rating}
+                  </span>
+
+                  <span className="stock">
+                    {item.stock} Left
+                  </span>
+                </div>
+
+                {/* FOOTER */}
+                <div className="footer">
+                  <div>
+                    <span className="price">
+                      ${item.price}
+                    </span>
+
+                    <span className="old-price">
+                      $
+                      {(
+                        item.price +
+                        item.price *
+                        (item.discountPercentage /
+                          100)
+                      ).toFixed(0)}
+                    </span>
+                  </div>
+
+                  {cartItems.some(
+                    (cartItem) =>
+                      cartItem.id === item.id
+                  ) ? (
+                    <button className="added-btn">
+                      Added ✓
+                    </button>
+                  ) : (
+                    <button
+                      className="cart-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dispatch(addToCart(item));
+                      }}
+                    >
+                      Add
+                    </button>
                   )}
-                  %
-                </div>
-
-                {/* IMAGE */}
-
-                <div className="image-wrapper">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.title}
-                    className="product-image"
-                  />
-                </div>
-
-                {/* BODY */}
-
-                <div className="card-body">
-                  <p className="brand">
-                    {item.brand}
-                  </p>
-
-                  <h3 className="product-title">
-                    {item.title}
-                  </h3>
-
-                  <p className="description">
-                    {item.description.slice(
-                      0,
-                      85
-                    )}
-                    ...
-                  </p>
-
-                  {/* TOP */}
-
-                  <div className="top-row">
-                    <span className="rating">
-                      ⭐ {item.rating}
-                    </span>
-
-                    <span className="stock">
-                      {item.stock} Left
-                    </span>
-                  </div>
-
-                  {/* FOOTER */}
-
-                  <div className="footer">
-                    <div>
-                      <span className="price">
-                        ${item.price}
-                      </span>
-
-                      <span className="old-price">
-                        $
-                        {(
-                          item.price +
-                          item.price *
-                          (item.discountPercentage / 100)
-                        ).toFixed(0)}
-                      </span>
-                    </div>
-
-                    {/* CHECK ITEM EXISTS */}
-                    {cartItems.some(
-                      (cartItem) => cartItem.id === item.id
-                    ) ? (
-                      <button className="added-btn">
-                        Added ✓
-                      </button>
-                    ) : (
-                      <button
-                        className="cart-btn"
-                        onClick={() =>
-                          dispatch(addToCart(item))
-                        }
-                      >
-                        Add
-                      </button>
-                    )}
-                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))
         )}
       </div>
 

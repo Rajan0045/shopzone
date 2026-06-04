@@ -1,111 +1,113 @@
 import React from "react";
 import NavBar from "./NavBar";
-
-const orders = [
-  {
-    id: "#ORD1025",
-    product: "Wireless Headphones",
-    price: "$129",
-    status: "Delivered",
-    date: "20 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-  },
-  {
-    id: "#ORD1026",
-    product: "Smart Watch",
-    price: "$199",
-    status: "Shipped",
-    date: "18 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-  },
-  {
-    id: "#ORD1027",
-    product: "Gaming Mouse",
-    price: "$59",
-    status: "Processing",
-    date: "16 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1527814050087-3793815479db",
-  },
-];
+import { useSelector } from "react-redux";
 
 const Orders = () => {
+  const orders = useSelector((state) => state.orders.orders);
+
+  console.log(orders)
+
   return (
     <>
       <NavBar />
+
       <div style={styles.container}>
-        {/* Header */}
         <div style={styles.header}>
-          <h1 style={styles.heading}>My Orders</h1>
+          <h1 style={styles.heading}>
+            My Orders
+          </h1>
 
           <p style={styles.subText}>
             Track and manage your purchases
           </p>
         </div>
 
-        {/* Orders */}
-        <div style={styles.ordersWrapper}>
-          {orders.map((item) => (
-            <div key={item.id} style={styles.card}>
-              {/* Left Section */}
-              <div style={styles.leftSection}>
-                <img
-                  src={item.image}
-                  alt={item.product}
-                  style={styles.image}
-                />
+        {orders.length === 0 ? (
+          <div
+            style={{
+              background: "#fff",
+              padding: "40px",
+              borderRadius: "20px",
+              textAlign: "center",
+            }}
+          >
+            <h2>No Orders Yet</h2>
 
-                <div style={styles.info}>
-                  <h3 style={styles.productName}>
-                    {item.product}
-                  </h3>
+            <p>
+              Complete a purchase to see
+              your orders here.
+            </p>
+          </div>
+        ) : (
+          <div style={styles.ordersWrapper}>
+  {orders.map((order) => (
+    <div key={order.id} style={styles.orderCard}>
+      {/* ORDER HEADER */}
+      <div style={styles.orderHeader}>
+        <div>
+          <h3 style={styles.orderTitle}>
+            Order #{order.id}
+          </h3>
 
-                  <p style={styles.orderId}>
-                    {item.id}
-                  </p>
-
-                  <p style={styles.date}>
-                    Ordered on {item.date}
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Section */}
-              <div style={styles.rightSection}>
-                <h2 style={styles.price}>
-                  {item.price}
-                </h2>
-
-                <span
-                  style={{
-                    ...styles.status,
-                    backgroundColor:
-                      item.status === "Delivered"
-                        ? "#dcfce7"
-                        : item.status === "Shipped"
-                          ? "#dbeafe"
-                          : "#fef9c3",
-
-                    color:
-                      item.status === "Delivered"
-                        ? "#166534"
-                        : item.status === "Shipped"
-                          ? "#1d4ed8"
-                          : "#854d0e",
-                  }}
-                >
-                  {item.status}
-                </span>
-
-                <button style={styles.button}>
-                  View Details
-                </button>
-              </div>
-            </div>
-          ))}
+          <p style={styles.date}>
+            {new Date(order.date).toLocaleString()}
+          </p>
         </div>
+
+        <div style={styles.orderSummary}>
+          <span style={styles.status}>
+            Paid
+          </span>
+
+          <h3 style={styles.total}>
+            ${order.total.toFixed(2)}
+          </h3>
+        </div>
+      </div>
+
+      {/* PRODUCTS */}
+      {order.items.map((item) => (
+        <div
+          key={item.id}
+          style={styles.productRow}
+        >
+          <div style={styles.leftSection}>
+            <img
+              src={item.thumbnail}
+              alt={item.title}
+              style={styles.image}
+            />
+
+            <div style={styles.info}>
+              <h3 style={styles.productName}>
+                {item.title}
+              </h3>
+
+              <p style={styles.orderId}>
+                Brand: {item.brand}
+              </p>
+
+              <p style={styles.date}>
+                Quantity: {item.quantity}
+              </p>
+            </div>
+          </div>
+
+          <div style={styles.rightSection}>
+            <h3 style={styles.price}>
+              $
+              {(
+                item.price *
+                item.quantity
+              ).toFixed(2)}
+            </h3>
+          </div>
+        </div>
+      ))}
+    </div>
+  ))}
+</div>
+        )}
       </div>
     </>
   );
@@ -118,7 +120,48 @@ const styles = {
     padding: "40px",
     fontFamily: "Arial, sans-serif",
   },
+orderCard: {
+  backgroundColor: "#fff",
+  borderRadius: "20px",
+  padding: "24px",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+},
 
+orderHeader: {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  borderBottom: "1px solid #e5e7eb",
+  paddingBottom: "16px",
+  marginBottom: "20px",
+},
+
+orderTitle: {
+  margin: 0,
+  fontSize: "22px",
+  color: "#111827",
+},
+
+orderSummary: {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  gap: "8px",
+},
+
+total: {
+  margin: 0,
+  fontSize: "24px",
+  color: "#111827",
+},
+
+productRow: {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "15px 0",
+  borderBottom: "1px solid #f3f4f6",
+},
   header: {
     marginBottom: "35px",
   },
