@@ -39,18 +39,16 @@ const Cart = () => {
       name: "My Store",
       description: "Cart Payment",
       handler: function (response) {
-        console.log("Payment Success:", response);
-        dispatch(
-          addOrder({
-            paymentId:
-              response.razorpay_payment_id,
-            items: cartItems,
-            total,
-          })
-        );
-
+        const order = {
+          id: Date.now(),
+          paymentId: response.razorpay_payment_id,
+          items: cartItems.map(item => ({ ...item })),
+          total,
+          date: new Date().toISOString(),
+        };
+        dispatch(addOrder(order));
         dispatch(clearCart());
-        navigate("/");
+        navigate(`/orders/${order.id}`);
       },
       prefill: {
         name: "Customer",

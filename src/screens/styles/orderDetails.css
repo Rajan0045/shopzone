@@ -1,0 +1,145 @@
+.order-details-container {
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  font-size: 40px;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.order-summary-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.order-summary-card h2 {
+  margin: 0;
+  color: #111827;
+}
+
+.order-summary-card p {
+  color: #6b7280;
+  margin-top: 8px;
+}
+
+.summary-right {
+  text-align: right;
+}
+
+.status-badge {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.products-heading {
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.product-image {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.product-content {
+  flex: 1;
+}
+
+.product-content h3 {
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.product-content p {
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.product-content span {
+  color: #111827;
+  font-weight: 600;
+}
+
+.product-price {
+  text-align: right;
+}
+
+.product-price h3 {
+  font-size: 28px;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.product-price p {
+  color: #6b7280;
+}
+
+.order-not-found {
+  padding: 60px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .order-summary-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .product-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .product-price {
+    text-align: center;
+  }
+
+  .product-image {
+    width: 180px;
+    height: 180px;
+  }
+}
