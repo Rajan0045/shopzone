@@ -153,11 +153,6 @@ function ProductDetails() {
               </div>
 
               <div>
-                <strong>Delivery:</strong>{" "}
-                Free Delivery
-              </div>
-
-              <div>
                 <strong>Return Policy:</strong>{" "}
                 7 Days Replacement
               </div>
