@@ -129,20 +129,6 @@
 }
 
 /* CARD */
-.hero-skeleton {
-  position: relative;
-  height: 500px;
-  display: flex;
-  align-items: center;
-  padding: 0 8%;
-  background: #f8fafc;
-  overflow: hidden;
-}
-
-.hero-skeleton .hero-content {
-  max-width: 650px;
-  width: 100%;
-}
 
 .card {
   background: white;
