@@ -91,35 +91,66 @@ function Home() {
     );
   }
 
+  function HeroSkeleton() {
+    return (
+      <div className="hero hero-skeleton">
+        <div className="hero-content">
+          <Skeleton
+            height={60}
+            width={500}
+            style={{ marginBottom: 20 }}
+          />
+          <Skeleton
+            height={20}
+            count={2}
+            width={450}
+            style={{ marginBottom: 10 }}
+          />
+          <Skeleton
+            height={50}
+            width={180}
+            borderRadius={12}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home-container">
       {/* HERO */}
       <NavBar productsRef={productsRef} />
-      <div className="hero">
-        <div className="hero-overlay"></div>
+      {loading ? (
+        <HeroSkeleton />
+      ) : (
+        <div className="hero">
+          <div className="hero-overlay"></div>
 
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Discover Premium Products
-          </h1>
+          <div className="hero-content">
+            <h1 className="hero-title">
+              Discover Premium Products
+            </h1>
 
-          <p className="hero-text">
-            Shop trending gadgets,
-            fashion, electronics and
-            accessories with premium
-            quality.
-          </p>
+            <p className="hero-text">
+              Shop trending gadgets,
+              fashion, electronics and
+              accessories with premium
+              quality.
+            </p>
 
-          <button className="shop-btn" onClick={() =>
-            productsRef.current?.scrollIntoView({
-              behavior: "smooth",
-            })
-          }>
-            Explore Collection
-          </button>
+            <button
+              className="shop-btn"
+              onClick={() =>
+                productsRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                })
+              }
+            >
+              Explore Collection
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* HEADER */}
 
