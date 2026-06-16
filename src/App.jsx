@@ -5,25 +5,36 @@ import Cart from "./screens/Cart";
 import NavBar from "./screens/NavBar";
 import ProductDetails from "./screens/ProductDetails";
 import OrderDetails from "./screens/OrderDetails";
-
+import Login from "./screens/authScreen/login";
+import Register from "./screens/authScreen/register";
+import { Toaster } from "react-hot-toast";
+import React from "react";
+import CreateProduct from "./screens/CreateProduct";
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <div>
-        {/* <NavBar /> */}
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/orders/:id" element={<OrderDetails />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+    <React.StrictMode>
+      <BrowserRouter>
+        <div>
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/products" element={<Home />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/orders/:id" element={<OrderDetails />} />
+              {/* //----------------- Owner screens -----------------// */}
+              <Route path="/owner/product-create" element={<CreateProduct />} />
+            </Routes>
+          </main>
+        </div>
+        <Toaster position="top-right" />
+      </BrowserRouter>
+    </React.StrictMode>
   );
 }
 

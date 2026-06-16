@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./styles/navBar.css";
-import {
-  setSearch,
-} from "../redux/features/products/productSlice";
+import { setSearch } from "../redux/features/products/productSlice";
+import toast from "react-hot-toast";
+import { Constants } from "../apis/constant";
+import axios from "axios";
 
 const NavBar = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
   const cartItems = useSelector(
     (state) => state.cart.cartItems
   );
+
   const { search } = useSelector(
     (state) => state.products
   );
@@ -24,25 +31,69 @@ const NavBar = (props) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] =
+    useState(false);
+
+  const profileRef = useRef(null);
+
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target)
+      ) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
 
   const handleSearch = (e) => {
     setIsSearching(true);
+
     dispatch(setSearch(e.target.value));
+
     setTimeout(() => {
       setIsSearching(false);
-    }, 500); // simulate search delay
+    }, 500);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        `${Constants.development}/users/logout`);
+      localStorage.removeItem("user");
+      toast.success(response.data.message);
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
   };
 
   return (
     <nav className="navbar">
-      {/* TOP BAR */}
       <div className="navbar-top">
         {/* LOGO */}
         <h2
           className="logo"
           onClick={() => navigate("/")}
         >
-          ShopZone
+          ApniDukaan
         </h2>
 
         {/* SEARCH */}
@@ -55,9 +106,11 @@ const NavBar = (props) => {
               value={search}
               onChange={handleSearch}
               onFocus={() =>
-                props?.productsRef.current?.scrollIntoView({
-                  behavior: "smooth",
-                })
+                props?.productsRef?.current?.scrollIntoView(
+                  {
+                    behavior: "smooth",
+                  }
+                )
               }
             />
 
@@ -65,9 +118,11 @@ const NavBar = (props) => {
               <div className="search-spinner"></div>
             )}
           </div>
-        ) : <div className="search-wrapper" />}
+        ) : (
+          <div className="search-wrapper" />
+        )}
 
-        {/* DESKTOP LINKS */}
+        {/* DESKTOP NAV */}
         <div className="nav-links desktop-nav">
           <span
             className="nav-link"
@@ -84,6 +139,7 @@ const NavBar = (props) => {
           >
             Orders
           </span>
+
           <div
             className="cart-icon-wrapper"
             onClick={() => navigate("/cart")}
@@ -96,6 +152,73 @@ const NavBar = (props) => {
               <span className="cart-badge">
                 {totalQuantity}
               </span>
+            )}
+          </div>
+
+          {/* PROFILE */}
+          {/* PROFILE */}
+          <div
+            className="profile-wrapper"
+            ref={profileRef}
+          >
+            {user ? (
+              <>
+                <div
+                  className="profile-avatar"
+                  onClick={() =>
+                    setShowProfileMenu(!showProfileMenu)
+                  }
+                >
+                  {user?.fullname
+                    ?.charAt(0)
+                    ?.toUpperCase()}
+                </div>
+
+                {showProfileMenu && (
+                  <div className="profile-dropdown">
+                    <div className="profile-header">
+                      <strong>
+                        {user?.fullname}
+                      </strong>
+                      <small>
+                        {user?.email}
+                      </small>
+                    </div>
+
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        navigate("/profile")
+                      }
+                    >
+                      👤 Profile
+                    </div>
+
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        navigate("/settings")
+                      }
+                    >
+                      ⚙️ Settings
+                    </div>
+
+                    <div
+                      className="dropdown-item logout-item"
+                      onClick={handleLogout}
+                    >
+                      🚪 Logout
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                alt="Guest User"
+                className="guest-avatar"
+                onClick={() => navigate("/login")}
+              />
             )}
           </div>
         </div>
@@ -142,6 +265,16 @@ const NavBar = (props) => {
             }}
           >
             Cart 🛒
+          </span>
+
+          <span
+            className="mobile-link"
+            onClick={() => {
+              handleLogout();
+              setMenuOpen(false);
+            }}
+          >
+            Logout
           </span>
         </div>
       )}

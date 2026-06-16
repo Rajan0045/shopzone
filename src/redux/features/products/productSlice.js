@@ -2,35 +2,46 @@ import {
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
+import axios from "axios";
+import { Constants } from "../../../apis/constant";
 
 /* FETCH PRODUCTS */
 
 export const fetchProducts =
   createAsyncThunk(
     "products/fetchProducts",
+    async (
+      {
+        limit = 12,
+        skip = 1,
+        search = null,
+      },
+      thunkAPI
+    ) => {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await axios.get(
+          `${Constants.development}/products/list`,
+          {
+            params: {
+              limit,
+              skip,
+              search,
+            },
+            headers: {
+              Authorization: `Bearer ${user?.token || ""
+                }`,
+            }
+          }
+        );
 
-    async ({
-      limit = 12,
-      skip = 0,
-      search = "",
-    }) => {
-      let url = "";
-
-      // SEARCH API
-      if (search) {
-        url = `https://dummyjson.com/products/search?q=${search}&limit=${limit}&skip=${skip}`;
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(
+          error.response?.data?.message ||
+          "Failed to fetch products"
+        );
       }
-
-      // NORMAL PAGINATION API
-      else {
-        url = `https://dummyjson.com/products?limit=${limit}&skip=${skip}`;
-      }
-
-      const response = await fetch(url);
-
-      const data = await response.json();
-
-      return data;
     }
   );
 
@@ -51,14 +62,16 @@ const productSlice = createSlice({
   },
 
   reducers: {
-    setCurrentPage: (state, action) => {
-      state.currentPage = action.payload;
+    setCurrentPage: (
+      state,
+      action
+    ) => {
+      state.currentPage =
+        action.payload;
     },
 
     setSearch: (state, action) => {
       state.search = action.payload;
-
-      // RESET PAGE WHEN SEARCHING
       state.currentPage = 1;
     },
   },
@@ -66,16 +79,13 @@ const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      /* PENDING */
-
       .addCase(
         fetchProducts.pending,
         (state) => {
           state.loading = true;
+          state.error = null;
         }
       )
-
-      /* SUCCESS */
 
       .addCase(
         fetchProducts.fulfilled,
@@ -83,14 +93,12 @@ const productSlice = createSlice({
           state.loading = false;
 
           state.products =
-            action.payload.products;
+            action.payload.products || [];
 
           state.total =
-            action.payload.total;
+            action.payload.total || 0;
         }
       )
-
-      /* ERROR */
 
       .addCase(
         fetchProducts.rejected,
@@ -98,13 +106,12 @@ const productSlice = createSlice({
           state.loading = false;
 
           state.error =
-            action.error.message;
+            action.payload ||
+            "Failed to fetch products";
         }
       );
   },
 });
-
-/* EXPORTS */
 
 export const {
   setCurrentPage,

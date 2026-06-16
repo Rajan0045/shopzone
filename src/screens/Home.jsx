@@ -24,19 +24,14 @@ function Home() {
     limit,
     total,
     search,
-  } = useSelector(
-    (state) => state.products
-  );
-  const cartItems = useSelector(
-    (state) => state.cart.cartItems
-  );
+  } = useSelector((state) => state.products);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   /* FETCH PRODUCTS */
 
   useEffect(() => {
     const skip =
       (currentPage - 1) * limit;
-
     dispatch(
       fetchProducts({
         limit,
@@ -53,9 +48,7 @@ function Home() {
 
   /* TOTAL PAGES */
 
-  const totalPages = Math.ceil(
-    total / limit
-  );
+  const totalPages = Math.ceil(total / limit);
 
   function ProductSkeleton() {
     return (
@@ -150,132 +143,128 @@ function Home() {
             </p>
           </div>
         ) : (
-          products.map((item) => (
-            <div
-              key={item.id}
-              className="card"
-              onClick={() =>
-                navigate(`/product/${item.id}`)
-              }
-            >
-              {/* BADGE */}
-              <div className="discount-badge">
-                -{Math.round(item.discountPercentage)}%
-              </div>
-
-              {/* IMAGE */}
-              <div className="image-wrapper">
-                <img
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="product-image"
-                />
-              </div>
-
-              {/* BODY */}
-              <div className="card-body">
-                <p className="brand">
-                  {item.brand}
-                </p>
-
-                <h3 className="product-title">
-                  {item.title}
-                </h3>
-
-                <p className="description">
-                  {item.description.slice(0, 85)}
-                  ...
-                </p>
-
-                {/* TOP */}
-                <div className="top-row">
-                  <span className="rating">
-                    ⭐ {item.rating}
-                  </span>
-
-                  <span className="stock">
-                    {item.stock} Left
-                  </span>
+          products.map((item) => {
+            let image = item.image ? `data:image/jpeg;base64,${item.image.toString("base64")}` : null;
+            return (
+              <div
+                key={item._id}
+                className="card"
+                onClick={() =>
+                  navigate(`/product/${item._id}`)
+                }
+              >
+                {/* DISCOUNT BADGE */}
+                <div className="discount-badge">
+                  -{item.discount || 0}%
                 </div>
 
-                {/* FOOTER */}
-                <div className="footer">
-                  <div>
-                    <span className="price">
-                      ${item.price}
-                    </span>
+                {/* IMAGE */}
+                <div className="image-wrapper">
+                  <img
+                    src={image}
+                    alt={item.title}
+                    className="image"
+                  />
+                </div>
 
-                    <span className="old-price">
-                      $
-                      {(
-                        item.price +
-                        item.price *
-                        (item.discountPercentage /
-                          100)
-                      ).toFixed(0)}
-                    </span>
+                {/* BODY */}
+                <div className="card-body">
+                  <p className="brand">
+                    ShopZone Product
+                  </p>
+
+                  <h3 className="product-title">
+                    {item.title}
+                  </h3>
+
+                  <p className="description">
+                    {item.description.length > 65
+                      ? item.description.slice(0, 65).concat("...")
+                      : item.description}
+                  </p>
+
+                  <div className="footer">
+                    <div>
+                      <span className="price">
+                        ₹{item.price}
+                      </span>
+
+                      {item.discount > 0 && (
+                        <span className="old-price">
+                          ₹
+                          {Math.round(
+                            item.price /
+                            (1 - item.discount / 100)
+                          )}
+                        </span>
+                      )}
+                    </div>
+
+                    {cartItems.some(
+                      (cartItem) =>
+                        cartItem._id === item._id
+                    ) ? (
+                      <button className="added-btn">
+                        Added ✓
+                      </button>
+                    ) : (
+                      <button
+                        className="cart-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dispatch(addToCart(item));
+                        }}
+                      >
+                        Add
+                      </button>
+                    )}
                   </div>
-
-                  {cartItems.some(
-                    (cartItem) =>
-                      cartItem.id === item.id
-                  ) ? (
-                    <button className="added-btn">
-                      Added ✓
-                    </button>
-                  ) : (
-                    <button
-                      className="cart-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        dispatch(addToCart(item));
-                      }}
-                    >
-                      Add
-                    </button>
-                  )}
                 </div>
               </div>
-            </div>
-          ))
+            )
+          }
+          )
         )}
       </div>
 
       {/* PAGINATION */}
-      <div className="pagination-wrapper">
-        <div className="pagination">
-          <button
-            className="page-btn"
-            disabled={currentPage === 1}
-            onClick={() =>
-              dispatch(
-                setCurrentPage(currentPage - 1)
-              )
-            }
-          >
-            Previous
-          </button>
+      {
+        total > limit &&
+        <div className="pagination-wrapper">
+          <div className="pagination">
+            <button
+              className="page-btn"
+              disabled={currentPage === 1}
+              onClick={() =>
+                dispatch(
+                  setCurrentPage(currentPage - 1)
+                )
+              }
+            >
+              Previous
+            </button>
 
-          <span className="page-number">
-            {currentPage}
-          </span>
+            <span className="page-number">
+              {currentPage}
+            </span>
 
-          <button
-            className="page-btn"
-            disabled={
-              currentPage >=
-              Math.ceil(total / limit)
-            }
-            onClick={() =>
-              dispatch(
-                setCurrentPage(currentPage + 1)
-              )
-            }
-          >
-            Next
-          </button>
+            <button
+              className="page-btn"
+              disabled={
+                currentPage >=
+                Math.ceil(total / limit)
+              }
+              onClick={() =>
+                dispatch(
+                  setCurrentPage(currentPage + 1)
+                )
+              }
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 }

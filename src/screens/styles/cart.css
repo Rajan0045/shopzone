@@ -79,19 +79,19 @@
   transform: translateY(-4px);
 }
 
+.cart-image {
+  width: 150px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #f9fafb;
+  display: block;
+}
+
 .cart-left {
   display: flex;
   gap: 22px;
   align-items: center;
-}
-
-.cart-image {
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
-  background: #f9fafb;
-  padding: 14px;
-  border-radius: 18px;
 }
 
 .cart-info {

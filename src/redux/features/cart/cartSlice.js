@@ -12,7 +12,7 @@ const cartSlice = createSlice({
       const existingItem =
         state.cartItems.find(
           (item) =>
-            item.id === action.payload.id
+            item._id === action.payload._id
         );
 
       if (existingItem) {
@@ -29,7 +29,7 @@ const cartSlice = createSlice({
       state.cartItems =
         state.cartItems.filter(
           (item) =>
-            item.id !== action.payload
+            item._id !== action.payload
         );
     },
 
@@ -40,7 +40,7 @@ const cartSlice = createSlice({
       const item =
         state.cartItems.find(
           (item) =>
-            item.id === action.payload
+            item._id === action.payload
         );
 
       if (item) {
@@ -55,7 +55,7 @@ const cartSlice = createSlice({
       const item =
         state.cartItems.find(
           (item) =>
-            item.id === action.payload
+            item._id === action.payload
         );
 
       if (

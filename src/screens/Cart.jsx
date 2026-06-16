@@ -13,9 +13,7 @@ import { addOrder } from "../redux/features/order/orderSlice";
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cartItems = useSelector(
-    (state) => state.cart.cartItems
-  );
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   const subtotal = cartItems.reduce(
     (total, item) =>
@@ -100,104 +98,105 @@ const Cart = () => {
             {/* LEFT SIDE */}
 
             <div className="cart-section">
-              {cartItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="cart-card"
-                >
-                  {/* LEFT */}
+              {cartItems.map((item) => {
+                let image = item.image ? `data:image/jpeg;base64,${item.image.toString("base64")}` : null;
+                return (
+                  <div
+                    key={item.id}
+                    className="cart-card"
+                  >
+                    {/* LEFT */}
 
-                  <div className="cart-left">
-                    <img
-                      src={item.thumbnail}
-                      alt={item.title}
-                      className="cart-image"
-                    />
+                    <div className="cart-left">
+                      <img
+                        src={image}
+                        alt={item.title}
+                        className="cart-image"
+                      />
 
-                    <div className="cart-info">
-                      <p className="cart-brand">
-                        {item.brand}
-                      </p>
+                      <div className="cart-info">
+                        <p className="cart-brand">
+                          {item.brand}
+                        </p>
 
-                      <h3 className="cart-title">
-                        {item.title}
-                      </h3>
+                        <h3 className="cart-title">
+                          {item.title}
+                        </h3>
 
-                      <p className="cart-price">
-                        ${item.price}
-                      </p>
+                        <p className="cart-price">
+                          ₹{item.price}
+                        </p>
 
-                      {/* QUANTITY */}
+                        {/* QUANTITY */}
 
-                      <div className="quantity-box">
-                        <button
-                          className="qty-btn"
-                          onClick={() => {
-                            if (item.quantity === 1) {
-                              dispatch(
-                                removeFromCart(
-                                  item.id
+                        <div className="quantity-box">
+                          <button
+                            className="qty-btn"
+                            style={{ backgroundColor: item.quantity === 1 && "#424242" }}
+                            disabled={item.quantity === 1}
+                            onClick={() => {
+                              if (item.quantity === 1) {
+                                dispatch(removeFromCart(item._id))
+                              } else {
+                                dispatch(
+                                  decreaseQuantity(
+                                    item._id
+                                  )
                                 )
-                              )
-                            } else {
+                              }
+                            }
+                            }
+                          >
+                            −
+                          </button>
+
+                          <span className="qty">
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            className="qty-btn"
+                            onClick={() =>
                               dispatch(
-                                decreaseQuantity(
-                                  item.id
+                                increaseQuantity(
+                                  item._id
                                 )
                               )
                             }
-                          }
-                          }
-                        >
-                          −
-                        </button>
-
-                        <span className="qty">
-                          {item.quantity}
-                        </span>
-
-                        <button
-                          className="qty-btn"
-                          onClick={() =>
-                            dispatch(
-                              increaseQuantity(
-                                item.id
-                              )
-                            )
-                          }
-                        >
-                          +
-                        </button>
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* RIGHT */}
+                    {/* RIGHT */}
 
-                  <div className="cart-right">
-                    <p className="item-total">
-                      $
-                      {(
-                        item.price *
-                        item.quantity
-                      ).toFixed(2)}
-                    </p>
+                    <div className="cart-right">
+                      <p className="item-total">
+                        ₹
+                        {(
+                          item.price *
+                          item.quantity
+                        ).toFixed(2)}
+                      </p>
 
-                    <button
-                      className="remove-btn"
-                      onClick={() =>
-                        dispatch(
-                          removeFromCart(
-                            item.id
+                      <button
+                        className="remove-btn"
+                        onClick={() =>
+                          dispatch(
+                            removeFromCart(
+                              item._id
+                            )
                           )
-                        )
-                      }
-                    >
-                      Remove
-                    </button>
+                        }
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* SUMMARY */}
@@ -211,7 +210,7 @@ const Cart = () => {
                 <span>Subtotal</span>
 
                 <span>
-                  ${subtotal.toFixed(2)}
+                  ₹{subtotal.toFixed(2)}
                 </span>
               </div>
 
@@ -219,17 +218,15 @@ const Cart = () => {
                 <span>Shipping</span>
 
                 <span>
-                  ${shipping.toFixed(2)}
+                  ₹{shipping.toFixed(2)}
                 </span>
               </div>
 
               <div className="summary-line"></div>
-
               <div className="total-row">
                 <span>Total</span>
-
                 <span>
-                  ${total.toFixed(2)}
+                  ₹{total.toFixed(2)}
                 </span>
               </div>
               <button
