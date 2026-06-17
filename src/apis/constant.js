@@ -1,6 +1,6 @@
 export const Constants = {
     debug: true,
-    development: "http://localhost:3000",
+    development: "https://apnidukaanbackend-1.onrender.com",
     production: "",
     image: ""
 }
