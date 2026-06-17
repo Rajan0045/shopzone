@@ -96,7 +96,8 @@ const NavBar = ({ productsRef }) => {
     }
   };
 
-  const imageSrc = user?.image ? `data:image/jpeg;base64,${user.image}` : "";
+  const imageSrc = user?.image ? `data:image/jpeg;base64,${user.image}` : null;
+  
 
   return (
     <nav className="navbar">
@@ -188,12 +189,15 @@ const NavBar = ({ productsRef }) => {
                     )
                   }
                 >
-                  <img
-                    src={imageSrc}
-                    alt="profile"
-                    className="profile-avatar-image"
-                  />
-                  {user?.fullname
+                  {
+                    imageSrc &&
+                    <img
+                      src={imageSrc}
+                      alt="profile"
+                      className="profile-avatar-image"
+                    />
+                  }
+                  {user?.fullname && !imageSrc
                     ?.charAt(0)
                     ?.toUpperCase()}
                 </div>

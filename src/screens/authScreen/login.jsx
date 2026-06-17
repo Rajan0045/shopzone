@@ -53,7 +53,6 @@ function Login() {
         password: formData.password,
       });
       dispatch(setUser(response.data.userData));
-      // localStorage.setItem("user", JSON.stringify(response.data.userData));
       toast.success(response.data.message);
       navigate("/");
     } catch (error) {

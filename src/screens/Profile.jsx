@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import api from "../apis/axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/features/user/userSlice";
 
 function Profile() {
-    const [user, setUser] = useState({
+    const [user, setUserData] = useState({
         fullname: "",
         email: "",
         contact: "",
@@ -14,9 +16,9 @@ function Profile() {
 
     const [imageFile, setImageFile] = useState(null);
     const [previewImage, setPreviewImage] = useState("");
-
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         getProfile();
@@ -25,12 +27,12 @@ function Profile() {
     const getProfile = async () => {
         try {
             const res = await api.get("/users/profile");
-            setUser(res.data.user);
             if (res.data.success) {
+                setUserData(res.data.user);
                 if (res.data.user.image) {
                     setPreviewImage(`data:image/jpeg;base64,${res.data.user.image}`);
                 }
-                localStorage.setItem("user", JSON.stringify(res.data.userData));
+                dispatch(setUser(res.data.user));
             }
         } catch (error) {
             console.log(error);
@@ -40,7 +42,7 @@ function Profile() {
     };
 
     const handleChange = (e) => {
-        setUser((prev) => ({
+        setUserData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
@@ -98,8 +100,6 @@ function Profile() {
             </>
         );
     }
-
-    console.log(previewImage, "--previewImage");
 
     return (
         <>

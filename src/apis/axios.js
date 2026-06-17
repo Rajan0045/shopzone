@@ -10,8 +10,8 @@ api.interceptors.request.use((config) => {
     if (persistedState) {
         const rootState = JSON.parse(persistedState);
         const userState = JSON.parse(rootState.user);
-        const token = userState?.user?.user?.token;
-        console.log("token:", userState);
+        const token = (userState?.user?.token || userState?.user?.user?.token);
+        console.log("TOKEN : ", token);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
