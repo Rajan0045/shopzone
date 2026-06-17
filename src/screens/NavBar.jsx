@@ -7,44 +7,51 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./styles/navBar.css";
 import { setSearch } from "../redux/features/products/productSlice";
+import { getCart, resetCartState } from "../redux/features/cart/cartSlice";
 import toast from "react-hot-toast";
 import { Constants } from "../apis/constant";
 import axios from "axios";
 
-const NavBar = (props) => {
+const NavBar = ({ productsRef }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
-  const cartItems = useSelector(
-    (state) => state.cart.cartItems
-  );
+  const user = useSelector((state) => state.user.user);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   const { search } = useSelector(
     (state) => state.products
   );
 
   const totalQuantity = cartItems.reduce(
-    (total, item) => total + item.quantity,
+    (total, item) =>
+      total + (item.quantity || 0),
     0
   );
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
+  const [isSearching, setIsSearching] =
+    useState(false);
+
   const [showProfileMenu, setShowProfileMenu] =
     useState(false);
 
   const profileRef = useRef(null);
 
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    dispatch(getCart());
+
+    const handleClickOutside = (
+      event
+    ) => {
       if (
         profileRef.current &&
-        !profileRef.current.contains(event.target)
+        !profileRef.current.contains(
+          event.target
+        )
       ) {
         setShowProfileMenu(false);
       }
@@ -61,12 +68,14 @@ const NavBar = (props) => {
         handleClickOutside
       );
     };
-  }, []);
+  }, [dispatch]);
 
   const handleSearch = (e) => {
     setIsSearching(true);
 
-    dispatch(setSearch(e.target.value));
+    dispatch(
+      setSearch(e.target.value)
+    );
 
     setTimeout(() => {
       setIsSearching(false);
@@ -75,15 +84,22 @@ const NavBar = (props) => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
-        `${Constants.development}/users/logout`);
+      const response =
+        await axios.post(`${Constants.development}/users/logout`);
       localStorage.removeItem("user");
       toast.success(response.data.message);
       navigate("/login");
+      dispatch(resetCartState());
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(
+        error.response?.data
+          ?.message ||
+        "Logout failed"
+      );
     }
   };
+
+  const imageSrc = user?.image ? `data:image/jpeg;base64,${user.image}` : "";
 
   return (
     <nav className="navbar">
@@ -91,7 +107,9 @@ const NavBar = (props) => {
         {/* LOGO */}
         <h2
           className="logo"
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
         >
           ApniDukaan
         </h2>
@@ -106,9 +124,10 @@ const NavBar = (props) => {
               value={search}
               onChange={handleSearch}
               onFocus={() =>
-                props?.productsRef?.current?.scrollIntoView(
+                productsRef?.current?.scrollIntoView(
                   {
-                    behavior: "smooth",
+                    behavior:
+                      "smooth",
                   }
                 )
               }
@@ -126,7 +145,9 @@ const NavBar = (props) => {
         <div className="nav-links desktop-nav">
           <span
             className="nav-link"
-            onClick={() => navigate("/")}
+            onClick={() =>
+              navigate("/")
+            }
           >
             Home
           </span>
@@ -142,7 +163,9 @@ const NavBar = (props) => {
 
           <div
             className="cart-icon-wrapper"
-            onClick={() => navigate("/cart")}
+            onClick={() =>
+              navigate("/cart")
+            }
           >
             <span className="nav-link">
               Cart 🛒
@@ -156,7 +179,6 @@ const NavBar = (props) => {
           </div>
 
           {/* PROFILE */}
-          {/* PROFILE */}
           <div
             className="profile-wrapper"
             ref={profileRef}
@@ -166,9 +188,16 @@ const NavBar = (props) => {
                 <div
                   className="profile-avatar"
                   onClick={() =>
-                    setShowProfileMenu(!showProfileMenu)
+                    setShowProfileMenu(
+                      !showProfileMenu
+                    )
                   }
                 >
+                  <img
+                    src={imageSrc}
+                    alt="profile"
+                    className="profile-avatar-image"
+                  />
                   {user?.fullname
                     ?.charAt(0)
                     ?.toUpperCase()}
@@ -178,17 +207,24 @@ const NavBar = (props) => {
                   <div className="profile-dropdown">
                     <div className="profile-header">
                       <strong>
-                        {user?.fullname}
+                        {
+                          user?.fullname
+                        }
                       </strong>
+
                       <small>
-                        {user?.email}
+                        {
+                          user?.email
+                        }
                       </small>
                     </div>
 
                     <div
                       className="dropdown-item"
                       onClick={() =>
-                        navigate("/profile")
+                        navigate(
+                          "/profile"
+                        )
                       }
                     >
                       👤 Profile
@@ -197,7 +233,9 @@ const NavBar = (props) => {
                     <div
                       className="dropdown-item"
                       onClick={() =>
-                        navigate("/settings")
+                        navigate(
+                          "/settings"
+                        )
                       }
                     >
                       ⚙️ Settings
@@ -205,7 +243,9 @@ const NavBar = (props) => {
 
                     <div
                       className="dropdown-item logout-item"
-                      onClick={handleLogout}
+                      onClick={
+                        handleLogout
+                      }
                     >
                       🚪 Logout
                     </div>
@@ -217,7 +257,9 @@ const NavBar = (props) => {
                 src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
                 alt="Guest User"
                 className="guest-avatar"
-                onClick={() => navigate("/login")}
+                onClick={() =>
+                  navigate("/login")
+                }
               />
             )}
           </div>
@@ -227,7 +269,9 @@ const NavBar = (props) => {
         <button
           className="menu-btn"
           onClick={() =>
-            setMenuOpen(!menuOpen)
+            setMenuOpen(
+              !menuOpen
+            )
           }
         >
           ☰
@@ -250,7 +294,9 @@ const NavBar = (props) => {
           <span
             className="mobile-link"
             onClick={() => {
-              navigate("/orders");
+              navigate(
+                "/orders"
+              );
               setMenuOpen(false);
             }}
           >
@@ -265,17 +311,33 @@ const NavBar = (props) => {
             }}
           >
             Cart 🛒
+            {totalQuantity > 0 &&
+              ` (${totalQuantity})`}
           </span>
 
-          <span
-            className="mobile-link"
-            onClick={() => {
-              handleLogout();
-              setMenuOpen(false);
-            }}
-          >
-            Logout
-          </span>
+          {user ? (
+            <span
+              className="mobile-link"
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+              }}
+            >
+              Logout
+            </span>
+          ) : (
+            <span
+              className="mobile-link"
+              onClick={() => {
+                navigate(
+                  "/login"
+                );
+                setMenuOpen(false);
+              }}
+            >
+              Login
+            </span>
+          )}
         </div>
       )}
     </nav>

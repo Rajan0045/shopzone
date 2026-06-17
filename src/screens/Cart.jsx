@@ -1,205 +1,279 @@
 import "./styles/cart.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  increaseQuantity,
-  decreaseQuantity,
-  removeFromCart,
-  clearCart,
-} from "../redux/features/cart/cartSlice";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import NavBar from "./NavBar";
-import { addOrder } from "../redux/features/order/orderSlice";
+import api from "../apis/axios";
+import toast from "react-hot-toast";
+import { getCart } from "../redux/features/cart/cartSlice";
 
 const Cart = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
+
+  const {
+    cartItems,
+    loading,
+  } = useSelector(
+    (state) => state.cart
+  );
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, [dispatch]);
+
+  const updateQuantity = async (
+    _id,
+    quantity
+  ) => {
+    try {
+      if (quantity <= 0) {
+        await removeProduct(_id);
+        return;
+      }
+
+      const res = await api.post(
+        "/cart/addToCart",
+        {
+          _id,
+          quantity,
+        }
+      );
+
+      if (res.data.success) {
+        dispatch(getCart());
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(
+        error.response?.data
+          ?.message ||
+        "Failed to update quantity"
+      );
+    }
+  };
+
+  const removeProduct = async (_id) => {
+    try {
+      const res = await api.delete(
+        `/cart/remove-product/${_id}`
+      );
+
+      if (res.data.success) {
+        toast.success(
+          "Product removed"
+        );
+
+        dispatch(getCart());
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(
+        error.response?.data
+          ?.message ||
+        "Failed to remove product"
+      );
+    }
+  };
 
   const subtotal = cartItems.reduce(
     (total, item) =>
-      total + item.price * item.quantity,
+      total +
+      item.price * item.quantity,
     0
   );
 
-  const shipping = subtotal > 0 ? 20 : 0;
+  const shipping =
+    subtotal > 0 ? 20 : 0;
 
-  const total = subtotal + shipping;
+  const total =
+    subtotal + shipping;
 
   const handlePayment = () => {
     if (!window.Razorpay) {
-      alert("Razorpay SDK failed to load");
+      alert(
+        "Razorpay SDK failed to load"
+      );
       return;
     }
+
     const options = {
       key: "rzp_test_SwN1CwWS0vHIri",
-      amount: Math.round(total * 100),
+      amount: Math.round(
+        total * 100
+      ),
       currency: "INR",
-      name: "My Store",
-      description: "Cart Payment",
-      handler: function (response) {
-        const order = {
-          id: Date.now(),
-          paymentId: response.razorpay_payment_id,
-          items: cartItems.map(item => ({ ...item })),
-          total,
-          date: new Date().toISOString(),
-        };
-        dispatch(addOrder(order));
-        dispatch(clearCart());
-        navigate(`/orders/${order.id}`);
+      name: "ApniDukaan",
+      description:
+        "Cart Payment",
+
+      handler: function () {
+        toast.success(
+          "Payment Successful"
+        );
+
+        navigate("/");
       },
+
       prefill: {
         name: "Customer",
-        email: "customer@example.com",
-        contact: "9999999999",
+        email:
+          "customer@example.com",
+        contact:
+          "9999999999",
       },
+
       theme: {
         color: "#3399cc",
       },
-      modal: {
-        ondismiss: function () {
-          console.log("Payment cancelled");
-        },
-      },
     };
 
-    const razorpay = new window.Razorpay(options);
+    const razorpay =
+      new window.Razorpay(
+        options
+      );
+
     razorpay.open();
   };
 
   return (
     <>
       <NavBar />
+
       <div className="cart-container">
-        {/* HEADER */}
         <div className="cart-header">
           <h1 className="cart-heading">
             My Cart
           </h1>
 
           <p className="cart-subtext">
-            Review your selected products
+            Review your selected
+            products
           </p>
         </div>
 
-        {/* EMPTY CART */}
-
         {cartItems.length === 0 ? (
           <div className="empty-cart">
-            <h2>Your cart is empty 🛒</h2>
+            <h2>
+              Your cart is empty 🛒
+            </h2>
 
             <p>
-              Add some products to continue
-              shopping.
+              Add some products to
+              continue shopping.
             </p>
           </div>
         ) : (
           <div className="cart-wrapper">
-            {/* LEFT SIDE */}
-
             <div className="cart-section">
-              {cartItems.map((item) => {
-                let image = item.image ? `data:image/jpeg;base64,${item.image.toString("base64")}` : null;
-                return (
-                  <div
-                    key={item.id}
-                    className="cart-card"
-                  >
-                    {/* LEFT */}
+              {cartItems.map(
+                (item) => {
+                  const image =
+                    item.image
+                      ? `data:image/jpeg;base64,${item.image}`
+                      : null;
 
-                    <div className="cart-left">
-                      <img
-                        src={image}
-                        alt={item.title}
-                        className="cart-image"
-                      />
+                  return (
+                    <div
+                      key={
+                        item.productId
+                      }
+                      className="cart-card"
+                    >
+                      <div className="cart-left">
+                        <img
+                          src={
+                            image
+                          }
+                          alt={
+                            item.name
+                          }
+                          className="cart-image"
+                        />
 
-                      <div className="cart-info">
-                        <p className="cart-brand">
-                          {item.brand}
-                        </p>
+                        <div className="cart-info">
+                          <h3 className="cart-title">
+                            {
+                              item.name
+                            }
+                          </h3>
 
-                        <h3 className="cart-title">
-                          {item.title}
-                        </h3>
+                          <p className="cart-price">
+                            ₹
+                            {
+                              item.price
+                            }
+                          </p>
 
-                        <p className="cart-price">
-                          ₹{item.price}
-                        </p>
-
-                        {/* QUANTITY */}
-
-                        <div className="quantity-box">
-                          <button
-                            className="qty-btn"
-                            style={{ backgroundColor: item.quantity === 1 && "#424242" }}
-                            disabled={item.quantity === 1}
-                            onClick={() => {
-                              if (item.quantity === 1) {
-                                dispatch(removeFromCart(item._id))
-                              } else {
-                                dispatch(
-                                  decreaseQuantity(
-                                    item._id
-                                  )
+                          <div className="quantity-box">
+                            <button
+                              className="qty-btn"
+                              disabled={
+                                item.quantity ===
+                                1
+                              }
+                              onClick={() =>
+                                updateQuantity(
+                                  item.productId,
+                                  item.quantity -
+                                  1
                                 )
                               }
-                            }
-                            }
-                          >
-                            −
-                          </button>
+                            >
+                              −
+                            </button>
 
-                          <span className="qty">
-                            {item.quantity}
-                          </span>
+                            <span className="qty">
+                              {
+                                item.quantity
+                              }
+                            </span>
 
-                          <button
-                            className="qty-btn"
-                            onClick={() =>
-                              dispatch(
-                                increaseQuantity(
-                                  item._id
+                            <button
+                              className="qty-btn"
+                              onClick={() =>
+                                updateQuantity(
+                                  item.productId,
+                                  item.quantity +
+                                  1
                                 )
-                              )
-                            }
-                          >
-                            +
-                          </button>
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* RIGHT */}
+                      <div className="cart-right">
+                        <p className="item-total">
+                          ₹
+                          {(
+                            item.price *
+                            item.quantity
+                          ).toFixed(
+                            2
+                          )}
+                        </p>
 
-                    <div className="cart-right">
-                      <p className="item-total">
-                        ₹
-                        {(
-                          item.price *
-                          item.quantity
-                        ).toFixed(2)}
-                      </p>
-
-                      <button
-                        className="remove-btn"
-                        onClick={() =>
-                          dispatch(
-                            removeFromCart(
-                              item._id
+                        <button
+                          className="remove-btn"
+                          onClick={() =>
+                            removeProduct(
+                              item.productId
                             )
-                          )
-                        }
-                      >
-                        Remove
-                      </button>
+                          }
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  );
+                }
+              )}
             </div>
-
-            {/* SUMMARY */}
 
             <div className="summary">
               <h2 className="summary-title">
@@ -207,31 +281,51 @@ const Cart = () => {
               </h2>
 
               <div className="summary-row">
-                <span>Subtotal</span>
+                <span>
+                  Subtotal
+                </span>
 
                 <span>
-                  ₹{subtotal.toFixed(2)}
+                  ₹
+                  {subtotal.toFixed(
+                    2
+                  )}
                 </span>
               </div>
 
               <div className="summary-row">
-                <span>Shipping</span>
+                <span>
+                  Shipping
+                </span>
 
                 <span>
-                  ₹{shipping.toFixed(2)}
+                  ₹
+                  {shipping.toFixed(
+                    2
+                  )}
                 </span>
               </div>
 
               <div className="summary-line"></div>
+
               <div className="total-row">
-                <span>Total</span>
                 <span>
-                  ₹{total.toFixed(2)}
+                  Total
+                </span>
+
+                <span>
+                  ₹
+                  {total.toFixed(
+                    2
+                  )}
                 </span>
               </div>
+
               <button
                 className="checkout-btn"
-                onClick={handlePayment}
+                onClick={
+                  handlePayment
+                }
               >
                 Proceed To Checkout
               </button>

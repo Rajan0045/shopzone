@@ -65,6 +65,7 @@ function CreateProduct() {
             toast.success(response.data.message);
             setFormData({
                 title: "",
+                description:"",
                 price: "",
                 discount: "",
             });
@@ -119,7 +120,7 @@ function CreateProduct() {
                         </div>
 
                          <div className="input-group">
-                            <label>Product Title</label>
+                            <label>Product description</label>
 
                             <input
                                 type="text"

@@ -4,10 +4,12 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Constants } from "../../apis/constant";
+import { setUser } from "../../redux/features/user/userSlice";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -50,7 +52,8 @@ function Login() {
         email: formData.email,
         password: formData.password,
       });
-      localStorage.setItem("user", JSON.stringify(response.data.userData));
+      dispatch(setUser(response.data.userData));
+      // localStorage.setItem("user", JSON.stringify(response.data.userData));
       toast.success(response.data.message);
       navigate("/");
     } catch (error) {

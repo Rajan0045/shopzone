@@ -10,6 +10,8 @@ import Register from "./screens/authScreen/register";
 import { Toaster } from "react-hot-toast";
 import React from "react";
 import CreateProduct from "./screens/CreateProduct";
+import Footer from "./screens/Footer";
+import Profile from "./screens/Profile";
 
 function App() {
 
@@ -27,11 +29,13 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:id" element={<OrderDetails />} />
+              <Route path="/profile" element={<Profile />} />
               {/* //----------------- Owner screens -----------------// */}
               <Route path="/owner/product-create" element={<CreateProduct />} />
             </Routes>
           </main>
         </div>
+        <Footer />
         <Toaster position="top-right" />
       </BrowserRouter>
     </React.StrictMode>

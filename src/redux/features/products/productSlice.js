@@ -7,43 +7,45 @@ import { Constants } from "../../../apis/constant";
 
 /* FETCH PRODUCTS */
 
-export const fetchProducts =
-  createAsyncThunk(
-    "products/fetchProducts",
-    async (
-      {
-        limit = 12,
-        skip = 1,
-        search = null,
-      },
-      thunkAPI
-    ) => {
-      try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const response = await axios.get(
-          `${Constants.development}/products/list`,
-          {
-            params: {
-              limit,
-              skip,
-              search,
-            },
-            headers: {
-              Authorization: `Bearer ${user?.token || ""
-                }`,
-            }
-          }
-        );
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async (
+    {
+      limit = 12,
+      skip = 1,
+      search = null,
+    },
+    thunkAPI
+  ) => {
+    try {
+      const state = thunkAPI.getState();
 
-        return response.data;
-      } catch (error) {
-        return thunkAPI.rejectWithValue(
-          error.response?.data?.message ||
-          "Failed to fetch products"
-        );
-      }
+      const token =
+        state.user?.user?.token || "";
+
+      const response = await axios.get(
+        `${Constants.development}/products/list`,
+        {
+          params: {
+            limit,
+            skip,
+            search,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+        "Failed to fetch products"
+      );
     }
-  );
+  }
+);
 
 /* SLICE */
 

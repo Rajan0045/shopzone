@@ -1,83 +1,69 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
+import api from "../../../apis/axios";
+
+export const getCart = createAsyncThunk(
+  "cart/getCart",
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get("/cart/items");
+      return response.data.cart;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message
+      );
+    }
+  }
+);
 
 const initialState = {
   cartItems: [],
+  loading: false,
+  error: null,
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
+
   reducers: {
-    addToCart: (state, action) => {
-      const existingItem =
-        state.cartItems.find(
-          (item) =>
-            item._id === action.payload._id
-        );
-
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        state.cartItems.push({
-          ...action.payload,
-          quantity: 1,
-        });
-      }
-    },
-
-    removeFromCart: (state, action) => {
-      state.cartItems =
-        state.cartItems.filter(
-          (item) =>
-            item._id !== action.payload
-        );
-    },
-
-    increaseQuantity: (
-      state,
-      action
-    ) => {
-      const item =
-        state.cartItems.find(
-          (item) =>
-            item._id === action.payload
-        );
-
-      if (item) {
-        item.quantity += 1;
-      }
-    },
-
-    decreaseQuantity: (
-      state,
-      action
-    ) => {
-      const item =
-        state.cartItems.find(
-          (item) =>
-            item._id === action.payload
-        );
-
-      if (
-        item &&
-        item.quantity > 1
-      ) {
-        item.quantity -= 1;
-      }
-    },
-
     clearCart: (state) => {
       state.cartItems = [];
     },
+
+    resetCartState: () => initialState,
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(
+        getCart.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.cartItems = action.payload;
+        }
+      )
+
+      .addCase(
+        getCart.rejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        }
+      );
   },
 });
 
 export const {
-  addToCart,
-  removeFromCart,
-  increaseQuantity,
-  decreaseQuantity,
   clearCart,
+  resetCartState,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
