@@ -11,6 +11,8 @@ import { getCart, resetCartState } from "../redux/features/cart/cartSlice";
 import toast from "react-hot-toast";
 import { Constants } from "../apis/constant";
 import axios from "axios";
+import { persistor } from "../redux/store";
+import { clearUser } from "../redux/features/user/userSlice";
 
 const NavBar = ({ productsRef }) => {
   const navigate = useNavigate();
@@ -84,18 +86,13 @@ const NavBar = ({ productsRef }) => {
 
   const handleLogout = async () => {
     try {
-      const response =
-        await axios.post(`${Constants.development}/users/logout`);
-      localStorage.removeItem("user");
-      toast.success(response.data.message);
-      navigate("/login");
+      await axios.post(`${Constants.development}/users/logout`);
+      dispatch(clearUser());
       dispatch(resetCartState());
+      await persistor.purge();
+      navigate("/login");
     } catch (error) {
-      toast.error(
-        error.response?.data
-          ?.message ||
-        "Logout failed"
-      );
+      console.log(error);
     }
   };
 
@@ -140,8 +137,6 @@ const NavBar = ({ productsRef }) => {
         ) : (
           <div className="search-wrapper" />
         )}
-
-        {/* DESKTOP NAV */}
         <div className="nav-links desktop-nav">
           <span
             className="nav-link"
