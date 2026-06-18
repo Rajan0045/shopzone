@@ -104,14 +104,16 @@ const NavBar = ({ productsRef }) => {
     <nav className="navbar">
       <div className="navbar-top">
         {/* LOGO */}
-        <h2
-          className="logo"
-          onClick={() =>
-            navigate("/")
-          }
+        <div
+          className="logo-wrapper"
+          onClick={() => navigate("/")}
         >
-          ApniDukaan
-        </h2>
+          <img
+            src="/logo.png" // place your logo in public/logo.png
+            alt="ApniDukaan"
+            className="navbar-logo"
+          />
+        </div>
 
         {/* SEARCH */}
         {location.pathname === "/" ? (

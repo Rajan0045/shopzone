@@ -209,6 +209,18 @@
   display: block;
 }
 
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar-logo {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+}
+
 .cart-badge {
   animation: pop 0.3s ease;
 }
