@@ -4,8 +4,10 @@ import toast from "react-hot-toast";
 import { Constants } from "../../apis/constant";
 import "../styles/createProduct.css"
 import NavBar from "../NavBar";
+import { useSelector } from "react-redux";
 
 function CreateProduct() {
+    const userData = useSelector((state) => state.user.user);
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -53,13 +55,12 @@ function CreateProduct() {
             data.append("description", formData.description);
             data.append("discount", formData.discount);
             data.append("image", image);
-            const user = await JSON.parse(localStorage.getItem("user"));
             const response = await axios.post(`${Constants.URL}/products/create`, data,
                 {
                     headers: {
                         "Content-Type":
                             "multipart/form-data",
-                        Authorization: `Bearer ${user?.token || ""}`,
+                        Authorization: `Bearer ${userData?.token || ""}`,
                     },
                 }
             );
