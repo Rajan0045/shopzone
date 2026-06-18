@@ -1,12 +1,15 @@
 import "./styles/profile.css";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import api from "../apis/axios";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/features/user/userSlice";
+import { Constants } from "../apis/constant";
+import { mainWrapper } from "../apis/main";
 
 function Profile() {
+    const userData = useSelector((state) => state.user.user);
     const [user, setUserData] = useState({
         fullname: "",
         email: "",
@@ -26,13 +29,14 @@ function Profile() {
 
     const getProfile = async () => {
         try {
-            const res = await api.get("/users/profile");
-            if (res.data.success) {
-                setUserData(res.data.user);
-                if (res.data.user.image) {
-                    setPreviewImage(`data:image/jpeg;base64,${res.data.user.image}`);
+            const response = await mainWrapper.get(`${Constants.URL}/users/profile`);
+            if (response.success) {
+                setUserData(response.user);
+                if (response.user.image) {
+                    setPreviewImage(`data:image/jpeg;base64,${response.user.image}`);
                 }
-                dispatch(setUser(res.data.user));
+                let updateUserData = { ...response.user, token: userData.token }
+                dispatch(setUser(updateUserData));
             }
         } catch (error) {
             console.log(error);
@@ -40,6 +44,7 @@ function Profile() {
             setLoading(false);
         }
     };
+
 
     const handleChange = (e) => {
         setUserData((prev) => ({
@@ -65,7 +70,7 @@ function Profile() {
             if (imageFile) {
                 formData.append("image", imageFile);
             }
-            const res = await api.put("/users/update", formData,
+            const res = await mainWrapper.put(`${Constants.URL}/users/update`, formData,
                 {
                     headers: {
                         "Content-Type":
@@ -73,11 +78,11 @@ function Profile() {
                     },
                 }
             );
-            toast.success(res.data.message);
+            toast.success(res.message);
             getProfile();
         } catch (error) {
             toast.error(
-                error.response?.data?.message ||
+                error.response?.message ||
                 "Failed to update profile"
             );
         } finally {

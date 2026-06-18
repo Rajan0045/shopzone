@@ -14,6 +14,8 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import toast from "react-hot-toast";
 import api from "../apis/axios";
+import { mainWrapper } from "../apis/main";
+import { Constants } from "../apis/constant";
 
 function Home() {
   const dispatch = useDispatch();
@@ -33,8 +35,10 @@ function Home() {
 
   const getCartItems = async () => {
     try {
-      const res = await api.get("/cart/items");
-      setCartItems(res.data.cart || []);
+      const response = await mainWrapper.get(`${Constants.URL}/cart/items`);
+      if(response && response.success){
+        setCartItems(response.cart || []);
+      }
     } catch (error) {
       console.log(error);
     }

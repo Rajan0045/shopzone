@@ -6,6 +6,8 @@ import NavBar from "./NavBar";
 import api from "../apis/axios";
 import toast from "react-hot-toast";
 import { getCart } from "../redux/features/cart/cartSlice";
+import { mainWrapper } from "../apis/main";
+import { Constants } from "../apis/constant";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -31,21 +33,16 @@ const Cart = () => {
         await removeProduct(_id);
         return;
       }
-
-      const res = await api.post(
-        "/cart/addToCart",
+      const response = await mainWrapper.post(`${Constants.URL}/cart/addToCart`,
         {
           _id,
           quantity,
         }
       );
-
-      if (res.data.success) {
+      if (response.success) {
         dispatch(getCart());
       }
     } catch (error) {
-      console.log(error);
-
       toast.error(
         error.response?.data
           ?.message ||

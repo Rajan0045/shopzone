@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Constants } from "../../apis/constant";
 import { setUser } from "../../redux/features/user/userSlice";
 import { useDispatch } from "react-redux";
+import { mainWrapper } from "../../apis/main";
 
 function Login() {
   const navigate = useNavigate();
@@ -43,18 +44,21 @@ function Login() {
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
     try {
       setLoading(true);
-      const response = await axios.post(`${Constants.development}/users/login`, {
+      const response = await mainWrapper.post(`${Constants.URL}/users/login`, {
         email: formData.email,
         password: formData.password,
       });
-      dispatch(setUser(response.data.userData));
-      toast.success(response.data.message);
-      navigate("/");
+      if (response && response.success) {
+        dispatch(setUser(response.userData));
+        toast.success(response.message);
+        navigate("/");
+      }
     } catch (error) {
       toast.error(error.response?.data?.message);
     } finally {

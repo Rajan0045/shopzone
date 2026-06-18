@@ -13,6 +13,7 @@ import { Constants } from "../apis/constant";
 import axios from "axios";
 import { persistor } from "../redux/store";
 import { clearUser } from "../redux/features/user/userSlice";
+import { mainWrapper } from "../apis/main";
 
 const NavBar = ({ productsRef }) => {
   const navigate = useNavigate();
@@ -21,15 +22,14 @@ const NavBar = ({ productsRef }) => {
   const user = useSelector((state) => state.user.user);
   const cartItems = useSelector((state) => state.cart.cartItems);
 
-  const { search } = useSelector(
-    (state) => state.products
-  );
+  const { search } = useSelector((state) => state.products);
 
-  const totalQuantity = cartItems.reduce(
+
+  const totalQuantity = cartItems && cartItems.length > 0 ? cartItems.reduce(
     (total, item) =>
       total + (item.quantity || 0),
     0
-  );
+  ) : 0;
 
   const [menuOpen, setMenuOpen] =
     useState(false);
@@ -86,18 +86,18 @@ const NavBar = ({ productsRef }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${Constants.development}/users/logout`);
+      await mainWrapper.post(`${Constants.URL}/users/logout`);
       dispatch(clearUser());
       dispatch(resetCartState());
       await persistor.purge();
-      navigate("/login");
+      window.location.href = '/login';
     } catch (error) {
       console.log(error);
     }
   };
 
   const imageSrc = user?.image ? `data:image/jpeg;base64,${user.image}` : null;
-  
+
 
   return (
     <nav className="navbar">
@@ -197,9 +197,9 @@ const NavBar = ({ productsRef }) => {
                       className="profile-avatar-image"
                     />
                   }
-                  {user?.fullname && !imageSrc
-                    ?.charAt(0)
-                    ?.toUpperCase()}
+                  {!imageSrc &&
+                    user?.fullname?.charAt(0)
+                      ?.toUpperCase()}
                 </div>
 
                 {showProfileMenu && (

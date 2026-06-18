@@ -53,7 +53,7 @@ function CreateProduct() {
             data.append("discount", formData.discount);
             data.append("image", image);
             const user = await JSON.parse(localStorage.getItem("user"));
-            const response = await axios.post(`${Constants.development}/products/create`, data,
+            const response = await axios.post(`${Constants.URL}/products/create`, data,
                 {
                     headers: {
                         "Content-Type":

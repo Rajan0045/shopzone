@@ -19,12 +19,8 @@ export const fetchProducts = createAsyncThunk(
   ) => {
     try {
       const state = thunkAPI.getState();
-
-      const token =
-        state.user?.user?.token || "";
-
-      const response = await axios.get(
-        `${Constants.development}/products/list`,
+      const token = state.user?.user?.token || "";
+      const response = await axios.get(`${Constants.URL}/products/list`,
         {
           params: {
             limit,

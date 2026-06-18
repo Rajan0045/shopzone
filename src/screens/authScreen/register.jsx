@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Constants } from "../../apis/constant";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/features/user/userSlice";
+import { mainWrapper } from "../../apis/main";
 
 function Register() {
   const navigate = useNavigate();
@@ -61,16 +62,17 @@ function Register() {
     if (!validateForm()) return;
     try {
       setLoading(true);
-      const response = await axios.post(`${Constants.development}/users/register`,
-        {
-          fullname: formData.fullname,
-          email: formData.email,
-          password: formData.password,
-        }
-      );
-      dispatch(setUser(response.data.userData));
-      toast.success(response.data.message);
-      navigate("/");
+      let body = {
+        fullname: formData.fullname,
+        email: formData.email,
+        password: formData.password,
+      }
+      const response = await mainWrapper.post(`${Constants.URL}/users/register`, body);
+      if (response) {
+        dispatch(setUser(response.data.userData));
+        toast.success(response.data.message);
+        navigate("/");
+      }
     } catch (error) {
       toast.error(
         error.response?.data?.message);

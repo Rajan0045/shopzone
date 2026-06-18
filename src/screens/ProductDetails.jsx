@@ -35,7 +35,7 @@ function ProductDetails() {
       );
 
       const res = await axios.get(
-        `${Constants.development}/products/product/${id}`,
+        `${Constants.URL}/products/product/${id}`,
         {
           headers: {
             Authorization: `Bearer ${
