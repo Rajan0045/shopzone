@@ -68,10 +68,12 @@ function Register() {
         password: formData.password,
       }
       const response = await mainWrapper.post(`${Constants.URL}/users/register`, body);
-      if (response) {
-        dispatch(setUser(response.data.userData));
-        toast.success(response.data.message);
+      if (response && response.success) {
+        dispatch(setUser(response.userData));
+        toast.success(response.message);
         navigate("/");
+      } else {
+        toast.success(response.message);
       }
     } catch (error) {
       toast.error(
