@@ -94,14 +94,37 @@ function Profile() {
         return (
             <>
                 <NavBar />
-                <h2
-                    style={{
-                        textAlign: "center",
-                        marginTop: 40,
-                    }}
-                >
-                    Loading...
-                </h2>
+
+                <div className="profile-page">
+                    <div className="profile-container">
+                        <div className="profile-card">
+
+                            <div className="skeleton skeleton-title"></div>
+
+                            <div className="profile-image-section">
+                                <div className="skeleton skeleton-avatar"></div>
+                            </div>
+
+                            <div className="profile-form-group">
+                                <div className="skeleton skeleton-label"></div>
+                                <div className="skeleton skeleton-input"></div>
+                            </div>
+
+                            <div className="profile-form-group">
+                                <div className="skeleton skeleton-label"></div>
+                                <div className="skeleton skeleton-input"></div>
+                            </div>
+
+                            <div className="profile-form-group">
+                                <div className="skeleton skeleton-label"></div>
+                                <div className="skeleton skeleton-input"></div>
+                            </div>
+
+                            <div className="skeleton skeleton-button"></div>
+
+                        </div>
+                    </div>
+                </div>
             </>
         );
     }

@@ -12,6 +12,8 @@ import React from "react";
 import CreateProduct from "./screens/CreateProduct";
 import Footer from "./screens/Footer";
 import Profile from "./screens/Profile";
+import About from "./screens/cmsPages/aboutUs";
+import PrivacyPolicy from "./screens/cmsPages/privacyPolicy";
 
 function App() {
 
@@ -30,6 +32,8 @@ function App() {
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:id" element={<OrderDetails />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/about-us" element={<About />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               {/* //----------------- Owner screens -----------------// */}
               <Route path="/owner/product-create" element={<CreateProduct />} />
             </Routes>
