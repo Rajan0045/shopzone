@@ -109,7 +109,7 @@ const NavBar = ({ productsRef }) => {
           onClick={() => navigate("/")}
         >
           <img
-            src="/logo.png" // place your logo in public/logo.png
+            src="/logo.png"
             alt="ApniDukaan"
             className="navbar-logo"
           />
@@ -125,12 +125,9 @@ const NavBar = ({ productsRef }) => {
               value={search}
               onChange={handleSearch}
               onFocus={() =>
-                productsRef?.current?.scrollIntoView(
-                  {
-                    behavior:
-                      "smooth",
-                  }
-                )
+                productsRef?.current?.scrollIntoView({
+                  behavior: "smooth",
+                })
               }
             />
 
@@ -141,37 +138,31 @@ const NavBar = ({ productsRef }) => {
         ) : (
           <div className="search-wrapper" />
         )}
+
+        {/* DESKTOP LINKS */}
         <div className="nav-links desktop-nav">
-          {
-            location.pathname !== "/" &&
+          {location.pathname !== "/" && (
             <span
               className="nav-link"
-              onClick={() =>
-                navigate("/")
-              }
+              onClick={() => navigate("/")}
             >
               Home
             </span>
-          }
-          {
-            user?.role !== "owner" &&
+          )}
+
+          {user?.role !== "owner" && (
             <span
               className="nav-link"
-              onClick={() =>
-                navigate("/orders")
-              }
+              onClick={() => navigate("/orders")}
             >
               Orders
             </span>
-          }
+          )}
 
-          {
-            user?.role !== "owner" &&
+          {user?.role !== "owner" && (
             <div
               className="cart-icon-wrapper"
-              onClick={() =>
-                navigate("/cart")
-              }
+              onClick={() => navigate("/cart")}
             >
               <span className="nav-link">
                 Cart 🛒
@@ -183,110 +174,95 @@ const NavBar = ({ productsRef }) => {
                 </span>
               )}
             </div>
-          }
+          )}
+        </div>
 
-          {/* PROFILE */}
-          <div
-            className="profile-wrapper"
-            ref={profileRef}
-          >
-            {user ? (
-              <>
-                <div
-                  className="profile-avatar"
-                  onClick={() =>
-                    setShowProfileMenu(
-                      !showProfileMenu
-                    )
-                  }
-                >
-                  {
-                    imageSrc &&
-                    <img
-                      src={imageSrc}
-                      alt="profile"
-                      className="profile-avatar-image"
-                    />
-                  }
-                  {!imageSrc &&
-                    user?.fullname?.charAt(0)
-                      ?.toUpperCase()}
-                </div>
+        {/* PROFILE - ALWAYS VISIBLE */}
+        <div
+          className="profile-wrapper"
+          ref={profileRef}
+        >
+          {user ? (
+            <>
+              <div
+                className="profile-avatar"
+                onClick={() =>
+                  setShowProfileMenu(!showProfileMenu)
+                }
+              >
+                {imageSrc ? (
+                  <img
+                    src={imageSrc}
+                    alt="profile"
+                    className="profile-avatar-image"
+                  />
+                ) : (
+                  user?.fullname
+                    ?.charAt(0)
+                    ?.toUpperCase()
+                )}
+              </div>
 
-                {showProfileMenu && (
-                  <div className="profile-dropdown">
-                    <div className="profile-header">
-                      <strong>
-                        {
-                          user?.role === "owner" ?
-                            `${user?.fullname} (Owner)`
-                            : user?.fullname
-                        }
-                      </strong>
+              {showProfileMenu && (
+                <div className="profile-dropdown">
+                  <div className="profile-header">
+                    <strong>
+                      {user?.role === "owner"
+                        ? `${user.fullname} (Owner)`
+                        : user.fullname}
+                    </strong>
 
-                      <small>
-                        {
-                          user?.email
-                        }
-                      </small>
-                    </div>
+                    <small>
+                      {user?.email}
+                    </small>
+                  </div>
 
+                  <div
+                    className="dropdown-item"
+                    onClick={() =>
+                      navigate("/profile")
+                    }
+                  >
+                    👤 Profile
+                  </div>
+
+                  {user?.role === "owner" && (
                     <div
                       className="dropdown-item"
                       onClick={() =>
-                        navigate(
-                          "/profile"
-                        )
+                        navigate("/settings")
                       }
                     >
-                      👤 Profile
+                      ⚙️ Settings
                     </div>
+                  )}
 
-                    {
-                      user?.role === "owner" &&
-                      <div
-                        className="dropdown-item"
-                        onClick={() =>
-                          navigate(
-                            "/settings"
-                          )
-                        }
-                      >
-                        ⚙️ Settings
-                      </div>
-                    }
-
-                    <div
-                      className="dropdown-item logout-item"
-                      onClick={
-                        handleLogout
-                      }
-                    >
-                      🚪 Logout
-                    </div>
+                  <div
+                    className="dropdown-item logout-item"
+                    onClick={handleLogout}
+                  >
+                    🚪 Logout
                   </div>
-                )}
-              </>
-            ) : (
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                alt="Guest User"
-                className="guest-avatar"
-                onClick={() =>
-                  navigate("/login")
-                }
-              />
-            )}
-          </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              alt="Guest User"
+              className="guest-avatar"
+              onClick={() =>
+                navigate("/login")
+              }
+            />
+          )}
         </div>
 
-        {/* MOBILE MENU BUTTON */}
+        {/* MENU BUTTON */}
         <button
           className="menu-btn"
           onClick={() =>
-            setMenuOpen(
-              !menuOpen
-            )
+            setMenuOpen(!menuOpen)
           }
         >
           ☰
