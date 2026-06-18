@@ -19,6 +19,7 @@ const NavBar = ({ productsRef }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user.user);
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -139,40 +140,48 @@ const NavBar = ({ productsRef }) => {
           <div className="search-wrapper" />
         )}
         <div className="nav-links desktop-nav">
-          <span
-            className="nav-link"
-            onClick={() =>
-              navigate("/")
-            }
-          >
-            Home
-          </span>
-
-          <span
-            className="nav-link"
-            onClick={() =>
-              navigate("/orders")
-            }
-          >
-            Orders
-          </span>
-
-          <div
-            className="cart-icon-wrapper"
-            onClick={() =>
-              navigate("/cart")
-            }
-          >
-            <span className="nav-link">
-              Cart 🛒
+          {
+            location.pathname !== "/" &&
+            <span
+              className="nav-link"
+              onClick={() =>
+                navigate("/")
+              }
+            >
+              Home
             </span>
+          }
+          {
+            user?.role !== "owner" &&
+            <span
+              className="nav-link"
+              onClick={() =>
+                navigate("/orders")
+              }
+            >
+              Orders
+            </span>
+          }
 
-            {totalQuantity > 0 && (
-              <span className="cart-badge">
-                {totalQuantity}
+          {
+            user?.role !== "owner" &&
+            <div
+              className="cart-icon-wrapper"
+              onClick={() =>
+                navigate("/cart")
+              }
+            >
+              <span className="nav-link">
+                Cart 🛒
               </span>
-            )}
-          </div>
+
+              {totalQuantity > 0 && (
+                <span className="cart-badge">
+                  {totalQuantity}
+                </span>
+              )}
+            </div>
+          }
 
           {/* PROFILE */}
           <div
@@ -207,7 +216,9 @@ const NavBar = ({ productsRef }) => {
                     <div className="profile-header">
                       <strong>
                         {
-                          user?.fullname
+                          user?.role === "owner" ?
+                            `${user?.fullname} (Owner)`
+                            : user?.fullname
                         }
                       </strong>
 
@@ -229,16 +240,19 @@ const NavBar = ({ productsRef }) => {
                       👤 Profile
                     </div>
 
-                    <div
-                      className="dropdown-item"
-                      onClick={() =>
-                        navigate(
-                          "/settings"
-                        )
-                      }
-                    >
-                      ⚙️ Settings
-                    </div>
+                    {
+                      user?.role === "owner" &&
+                      <div
+                        className="dropdown-item"
+                        onClick={() =>
+                          navigate(
+                            "/settings"
+                          )
+                        }
+                      >
+                        ⚙️ Settings
+                      </div>
+                    }
 
                     <div
                       className="dropdown-item logout-item"

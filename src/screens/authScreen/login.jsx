@@ -58,6 +58,8 @@ function Login() {
         dispatch(setUser(response.userData));
         toast.success(response.message);
         navigate("/");
+      } else {
+        toast.error(response.message);
       }
     } catch (error) {
       toast.error(error.response?.data?.message);
