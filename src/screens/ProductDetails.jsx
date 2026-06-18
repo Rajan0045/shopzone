@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Constants } from "../apis/constant";
 import api from "../apis/axios";
 import { getCart } from "../redux/features/cart/cartSlice";
+import { mainWrapper } from "../apis/main";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -19,9 +20,7 @@ function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
 
-  const cartItems = useSelector(
-    (state) => state.cart.cartItems
-  );
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   useEffect(() => {
     dispatch(getCart());
@@ -30,26 +29,14 @@ function ProductDetails() {
 
   const fetchProduct = async () => {
     try {
-      const user = JSON.parse(
-        localStorage.getItem("user")
-      );
-
-      const res = await axios.get(
-        `${Constants.URL}/products/product/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${
-              user?.token || ""
-            }`,
-          },
-        }
-      );
-
-      setProduct(res.data.product);
+      const response = await mainWrapper.get(`${Constants.URL}/products/product/${id}`);
+      if (response && response.success) {
+        setProduct(response.product);
+      }
     } catch (err) {
       console.log(
         err.response?.data ||
-          err.message
+        err.message
       );
     } finally {
       setLoading(false);
@@ -60,19 +47,16 @@ function ProductDetails() {
     try {
       setAdding(true);
 
-      const res = await api.post(
-        "/cart/addToCart",
+      const res = await mainWrapper.post(`${Constants.URL}/cart/addToCart`,
         {
           _id: product._id,
           quantity: 1,
         }
       );
-
-      if (res.data.success) {
+      if (res.success) {
         toast.success(
           "Added to cart"
         );
-
         dispatch(getCart());
       }
     } catch (error) {
@@ -81,7 +65,7 @@ function ProductDetails() {
       toast.error(
         error.response?.data
           ?.message ||
-          "Failed to add product"
+        "Failed to add product"
       );
     } finally {
       setAdding(false);
@@ -115,7 +99,7 @@ function ProductDetails() {
       (item) =>
         item.productId === product._id ||
         item.productId?._id ===
-          product._id
+        product._id
     );
 
   const imageSrc = product.image

@@ -53,20 +53,13 @@ const Cart = () => {
 
   const removeProduct = async (_id) => {
     try {
-      const res = await api.delete(
-        `/cart/remove-product/${_id}`
-      );
-
-      if (res.data.success) {
-        toast.success(
-          "Product removed"
-        );
-
+      const res = await mainWrapper.post(`${Constants.URL}/cart/remove-product/${_id}`);
+      if (res.success) {
+        toast.success("Product removed");
         dispatch(getCart());
       }
     } catch (error) {
       console.log(error);
-
       toast.error(
         error.response?.data
           ?.message ||
