@@ -53,13 +53,10 @@
 }
 
 .search-input {
-  width: 100%;
-
+  width: 60%;
   padding: 12px 45px 12px 18px;
-
   border: none;
   outline: none;
-
   border-radius: 12px;
 
   font-size: 15px;
@@ -284,6 +281,10 @@
   .desktop-nav {
     gap: 18px;
   }
+
+  .search-input {
+    width: 100%;
+  }
 }
 
 
@@ -305,6 +306,11 @@
   .navbar-top {
     flex-wrap: wrap;
     gap: 14px;
+  }
+
+
+  .search-input {
+    width: 100%;
   }
 
   .logo {
