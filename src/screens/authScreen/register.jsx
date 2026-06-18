@@ -73,7 +73,7 @@ function Register() {
         toast.success(response.message);
         navigate("/");
       } else {
-        toast.success(response.message);
+        toast.error(response.message);
       }
     } catch (error) {
       toast.error(
