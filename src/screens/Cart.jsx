@@ -12,13 +12,8 @@ import { Constants } from "../apis/constant";
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const {
-    cartItems,
-    loading,
-  } = useSelector(
-    (state) => state.cart
-  );
+  const user = useSelector((state) => state.user.user);
+  const { cartItems, loading } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(getCart());
@@ -75,56 +70,75 @@ const Cart = () => {
     0
   );
 
-  const shipping =
-    subtotal > 0 ? 20 : 0;
+  const shipping = subtotal > 0 ? 20 : 0;
+  const total = subtotal + shipping;
 
-  const total =
-    subtotal + shipping;
-
+  //----------------------------Order place ------------------------------------>>
   const handlePayment = () => {
     if (!window.Razorpay) {
-      alert(
-        "Razorpay SDK failed to load"
-      );
+      toast.error("Razorpay SDK failed to load");
       return;
     }
-
     const options = {
       key: "rzp_test_SwN1CwWS0vHIri",
-      amount: Math.round(
-        total * 100
-      ),
+      amount: Math.round(total * 100),
       currency: "INR",
       name: "ApniDukaan",
-      description:
-        "Cart Payment",
+      description: "Cart Payment",
+      handler: async function (response) {
+        try {
+          const orderResponse =
+            await mainWrapper.post(
+              `${Constants.URL}/order/order-place`,
+              {
+                shippingAddress: {
+                  name: user?.fullname,
+                  phone: user?.contact,
+                  address:
+                    user?.address ||
+                    "Not Provided",
+                },
+                paymentStatus: "Paid",
+                razorpayOrderId:
+                  response.razorpay_order_id,
+                razorpayPaymentId:
+                  response.razorpay_payment_id,
+              }
+            );
 
-      handler: function () {
-        toast.success(
-          "Payment Successful"
-        );
+          if (orderResponse.success) {
+            toast.success(
+              "Order Placed Successfully"
+            );
 
-        navigate("/");
+            dispatch(getCart());
+
+            navigate(`/order-details/${orderResponse.order._id}`,
+              {
+                replace: true,
+              }
+            );
+          }
+        } catch (error) {
+          console.log(error);
+
+          toast.error(
+            error.response?.data
+              ?.message ||
+            "Failed to place order"
+          );
+        }
       },
-
       prefill: {
-        name: "Customer",
-        email:
-          "customer@example.com",
-        contact:
-          "9999999999",
+        name: user?.fullname,
+        email: user?.email,
+        contact: user?.contact,
       },
-
       theme: {
         color: "#3399cc",
       },
     };
-
-    const razorpay =
-      new window.Razorpay(
-        options
-      );
-
+    const razorpay = new window.Razorpay(options);
     razorpay.open();
   };
 

@@ -24,7 +24,7 @@ const Settings = () => {
             title: "All Orders",
             subtitle: "View customer orders",
             icon: <FiShoppingBag color="#eac300" />,
-            path: "/orders",
+            path: "/owner/all-orders",
         },
         {
             title: "Transactions",

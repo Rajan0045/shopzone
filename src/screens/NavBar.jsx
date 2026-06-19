@@ -211,10 +211,6 @@ const NavBar = ({ productsRef }) => {
                         ? `${user.fullname} (Owner)`
                         : user.fullname}
                     </strong>
-
-                    <small>
-                      {user?.email}
-                    </small>
                   </div>
 
                   <div

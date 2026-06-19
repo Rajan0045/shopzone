@@ -5,7 +5,6 @@ import Home from "./screens/Home";
 import Orders from "./screens/Orders";
 import Cart from "./screens/Cart";
 import ProductDetails from "./screens/ProductDetails";
-import OrderDetails from "./screens/OrderDetails";
 import Login from "./screens/authScreen/login";
 import Register from "./screens/authScreen/register";
 import Footer from "./screens/Footer";
@@ -15,6 +14,8 @@ import PrivacyPolicy from "./screens/cmsPages/privacyPolicy";
 import CreateProduct from "./screens/adminScreen/CreateProduct";
 import Settings from "./screens/adminScreen/Settings";
 import { OwnerProtectedRoute } from "./apis/controller";
+import OrderDetail from "./screens/OrderDetails";
+import AllOrders from "./screens/adminScreen/AllOrders";
 
 function App() {
   return (
@@ -33,11 +34,12 @@ function App() {
 
               <Route path="/cart" element={<Cart />} />
               <Route path="/orders" element={<Orders />} />
-              <Route path="/orders/:id" element={<OrderDetails />} />
 
               <Route path="/profile" element={<Profile />} />
               <Route path="/about-us" element={<About />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/order-details/:orderId" element={<OrderDetail />} />
+
 
               {/* Owner Protected Routes */}
               <Route
@@ -49,14 +51,13 @@ function App() {
                 }
               />
 
-              <Route
-                path="/owner/product-create"
-                element={
-                  <OwnerProtectedRoute>
-                    <CreateProduct />
-                  </OwnerProtectedRoute>
-                }
+              <Route path="/owner/all-orders" element={
+                <OwnerProtectedRoute>
+                  <AllOrders />
+                </OwnerProtectedRoute>
+              }
               />
+
               <Route
                 path="/owner/product-create"
                 element={

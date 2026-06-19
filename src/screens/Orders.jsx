@@ -1,262 +1,170 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "./NavBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import "./styles/order.css";
+import { getMyOrders } from "../redux/features/order/orderSlice";
 
 const Orders = () => {
-  const orders = useSelector((state) => state.orders.orders);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { orders, loading } = useSelector((state) => state.orders);
+
+  useEffect(() => {
+    dispatch(getMyOrders());
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <>
+        <NavBar />
+        <div className="orders-container">
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className="order-skeleton"
+            >
+              <div className="skeleton-header"></div>
+              <div className="skeleton-product"></div>
+              <div className="skeleton-product"></div>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <NavBar />
-      <div style={styles.container}>
-        <div style={styles.header}>
-          <h1 style={styles.heading}>
-            My Orders
-          </h1>
 
-          <p style={styles.subText}>
-            Track and manage your purchases
+      <div className="orders-container">
+        <div className="orders-header">
+          <h1>My Orders</h1>
+
+          <p>
+            Track, manage and view all
+            your purchases.
           </p>
         </div>
 
-        {orders.length === 0 ? (
-          <div
-            style={{
-              background: "#fff",
-              padding: "40px",
-              borderRadius: "20px",
-              textAlign: "center",
-            }}
-          >
+        {orders?.length === 0 ? (
+          <div className="empty-orders">
             <h2>No Orders Yet</h2>
 
             <p>
-              Complete a purchase to see
-              your orders here.
+              Your placed orders will
+              appear here.
             </p>
           </div>
         ) : (
-          <div style={styles.ordersWrapper}>
-            {orders.map((order) => (
-              <div key={order.id} style={styles.orderCard}>
-                <div style={styles.orderHeader}>
-                  {/* header */}
+          orders?.map((order) => {
+            return (
+              <div
+                key={order._id}
+                className="order-card"
+              >
+                <div className="order-top">
+                  <div>
+                    <h3>
+                      Order #
+                      {order._id.slice(-8)}
+                    </h3>
+
+                    <p>
+                      {new Date(
+                        order.createdAt
+                      ).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  <div className="status-wrapper">
+                    <span className="order-status">
+                      {
+                        order.orderStatus
+                      }
+                    </span>
+
+                    <span className="payment-status">
+                      {
+                        order.paymentStatus
+                      }
+                    </span>
+                  </div>
                 </div>
 
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    style={styles.productRow}
-                  >
-                    <div style={styles.leftSection}>
+                {order.items.map((item) => {
+                  const image = item.product?.image?.data
+                    ? `data:image/jpeg;base64,${btoa(
+                      new Uint8Array(
+                        item.product.image.data
+                      ).reduce(
+                        (data, byte) =>
+                          data + String.fromCharCode(byte),
+                        ""
+                      )
+                    )}`
+                    : null;
+
+                  return (
+                    <div
+                      key={
+                        item.product?._id
+                      }
+                      className="product-row"
+                    >
                       <img
-                        src={item.thumbnail}
-                        alt={item.title}
-                        style={styles.image}
+                        src={image}
+                        alt={
+                          item.product?.name
+                        }
                       />
 
-                      <div style={styles.info}>
-                        <h3 style={styles.productName}>
-                          {item.title}
-                        </h3>
+                      <div className="product-info">
+                        <h4>
+                          {
+                            item.product
+                              ?.name
+                          }
+                        </h4>
 
-                        <p style={styles.orderId}>
-                          Brand: {item.brand}
-                        </p>
-
-                        <p style={styles.date}>
-                          Quantity: {item.quantity}
+                        <p>
+                          Quantity:{" "}
+                          {
+                            item.quantity
+                          }
                         </p>
                       </div>
-                    </div>
 
-                    <div style={styles.rightSection}>
-                      <h3 style={styles.price}>
-                        $
+                      <h4>
+                        ₹
                         {(
                           item.price *
                           item.quantity
                         ).toFixed(2)}
-                      </h3>
+                      </h4>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
-                {/* BUTTON HERE */}
-                <div style={styles.buttonContainer}>
-                  <button
-                    style={styles.button}
-                    onClick={() =>
-                      navigate(`/orders/${order.id}`)
-                    }
-                  >
+                <div className="order-footer">
+                  <h3>
+                    Total: ₹
+                    {order.totalAmount}
+                  </h3>
+
+                  <button onClick={() => navigate(`/order-details/${order._id}`)} >
                     View Details
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            )
+          })
         )}
       </div>
     </>
   );
-};
-
-const styles = {
-  container: {
-    backgroundColor: "#f3f4f6",
-    minHeight: "100vh",
-    padding: "40px",
-    fontFamily: "Arial, sans-serif",
-  },
-  orderCard: {
-    backgroundColor: "#fff",
-    borderRadius: "20px",
-    padding: "24px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-  },
-
-  orderHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #e5e7eb",
-    paddingBottom: "16px",
-    marginBottom: "20px",
-  },
-
-  orderTitle: {
-    margin: 0,
-    fontSize: "22px",
-    color: "#111827",
-  },
-
-  orderSummary: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-    gap: "8px",
-  },
-
-  total: {
-    margin: 0,
-    fontSize: "24px",
-    color: "#111827",
-  },
-
-  productRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "15px 0",
-    borderBottom: "1px solid #f3f4f6",
-  },
-  header: {
-    marginBottom: "35px",
-  },
-
-  heading: {
-    fontSize: "40px",
-    color: "#111827",
-    marginBottom: "8px",
-  },
-
-  subText: {
-    color: "#6b7280",
-    fontSize: "16px",
-  },
-
-  ordersWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "25px",
-  },
-
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: "20px",
-    padding: "24px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "20px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-    flexWrap: "wrap",
-  },
-
-  leftSection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    flex: 1,
-    minWidth: "280px",
-  },
-
-  image: {
-    width: "130px",
-    height: "130px",
-    borderRadius: "16px",
-    objectFit: "cover",
-  },
-
-  info: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-  },
-
-  productName: {
-    margin: 0,
-    fontSize: "24px",
-    color: "#111827",
-  },
-
-  orderId: {
-    margin: 0,
-    color: "#6b7280",
-    fontSize: "15px",
-  },
-
-  date: {
-    margin: 0,
-    color: "#9ca3af",
-    fontSize: "14px",
-  },
-
-  rightSection: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-    gap: "14px",
-    minWidth: "180px",
-  },
-
-  price: {
-    margin: 0,
-    fontSize: "30px",
-    color: "#111827",
-  },
-
-  status: {
-    padding: "8px 16px",
-    borderRadius: "999px",
-    fontSize: "14px",
-    fontWeight: "600",
-  },
-
-  button: {
-    padding: "12px 18px",
-    border: "none",
-    borderRadius: "10px",
-    backgroundColor: "#111827",
-    color: "#fff",
-    fontSize: "15px",
-    fontWeight: "600",
-    cursor: "pointer",
-  },
 };
 
 export default Orders;

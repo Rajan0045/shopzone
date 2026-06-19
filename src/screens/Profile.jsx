@@ -14,6 +14,7 @@ function Profile() {
         fullname: "",
         email: "",
         contact: "",
+        address: "",
         picture: "",
     });
 
@@ -67,6 +68,7 @@ function Profile() {
             formData.append("fullname", user.fullname);
             formData.append("email", user.email);
             formData.append("contact", user.contact);
+            formData.append("address", user.address);
             if (imageFile) {
                 formData.append("image", imageFile);
             }
@@ -207,6 +209,18 @@ function Profile() {
                                 type="number"
                                 name="contact"
                                 value={user.contact || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="profile-form-group">
+                            <label>
+                                Full address
+                            </label>
+
+                            <input
+                                type="text"
+                                name="address"
+                                value={user.address}
                                 onChange={handleChange}
                             />
                         </div>
