@@ -77,8 +77,45 @@ const AllOrders = () => {
                 </div>
 
                 {loading ? (
-                    <div className="loading">
-                        Loading...
+                    <div className="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Order ID
+                                    </th>
+                                    <th>
+                                        Customer
+                                    </th>
+                                    <th>
+                                        Phone
+                                    </th>
+                                    <th>
+                                        Amount
+                                    </th>
+                                    <th>
+                                        Payment
+                                    </th>
+                                    <th>
+                                        Order Status
+                                    </th>
+                                    <th>
+                                        Date
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {[...Array(6)].map((_, index) => (
+                                    <tr key={index}>
+                                        <td><div className="skeleton skeleton-text"></div></td>
+                                        <td><div className="skeleton skeleton-text"></div></td>
+                                        <td><div className="skeleton skeleton-text"></div></td>
+                                        <td><div className="skeleton skeleton-text"></div></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 ) : (
                     <>
