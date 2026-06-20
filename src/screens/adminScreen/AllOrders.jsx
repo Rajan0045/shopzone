@@ -43,24 +43,11 @@ const AllOrders = () => {
         }
     };
 
-    const updateStatus = async (
-        orderId,
-        orderStatus
-    ) => {
+    const updateStatus = async (orderId, orderStatus) => {
         try {
-            const response =
-                await mainWrapper.put(
-                    `${Constants.URL}/order/update-status/${orderId}`,
-                    {
-                        orderStatus,
-                    }
-                );
-
+            const response = await mainWrapper.put(`${Constants.URL}/order/update-status/${orderId}`, { orderStatus });
             if (response.success) {
-                toast.success(
-                    "Status Updated"
-                );
-
+                toast.success("Status Updated");
                 getAllOrders(page);
             }
         } catch (error) {
@@ -116,13 +103,10 @@ const AllOrders = () => {
                                             Payment
                                         </th>
                                         <th>
-                                          Order Status
+                                            Order Status
                                         </th>
                                         <th>
                                             Date
-                                        </th>
-                                        <th>
-                                            Action
                                         </th>
                                     </tr>
                                 </thead>
@@ -217,12 +201,6 @@ const AllOrders = () => {
                                                     {new Date(
                                                         order.createdAt
                                                     ).toLocaleDateString()}
-                                                </td>
-
-                                                <td>
-                                                    <button>
-                                                        View
-                                                    </button>
                                                 </td>
                                             </tr>
                                         )

@@ -10,8 +10,8 @@
 
 .hero {
   position: relative;
-  height: 420px;
-  background-image: url("https://images.unsplash.com/photo-1523275335684-37898b6baf30");
+  height: 550px;
+  background-image: url("/images/banner.png");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -34,6 +34,7 @@
   color: #fff;
   max-width: 600px;
 }
+
 .no-products {
   grid-column: 1 / -1;
   width: 100%;
