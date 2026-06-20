@@ -71,7 +71,11 @@ function Register() {
       if (response && response.success) {
         dispatch(setUser(response.userData));
         toast.success(response.message);
-        navigate("/");
+        if (response?.userData?.role === "owner") {
+          navigate("/settings");
+        } else {
+          navigate("/");
+        }
       } else {
         toast.error(response.message);
       }
