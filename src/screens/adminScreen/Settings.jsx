@@ -22,17 +22,17 @@ const Settings = () => {
             path: "/owner/product-create",
         },
         {
+            title: "All Products",
+            subtitle: "Mange the products ",
+            icon: <FiList color="#eac300" />,
+            path: "/owner/all-products"
+        },
+        {
             title: "All Orders",
             subtitle: "View customer orders",
             icon: <FiShoppingBag color="#eac300" />,
             path: "/owner/all-orders",
         },
-        {
-            title: "All Products",
-            subtitle: "Mange the products ",
-            icon: <FiList color="#eac300" />,
-            path: "/owner/all-products"
-        }
     ];
 
 
