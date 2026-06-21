@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://apnidukaan-by-rajan.vercel.app/sitemap.xml
