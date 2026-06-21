@@ -43,8 +43,8 @@
   flex-direction: column;
 }
 
-.product-left h1 {
-  margin-bottom: 12px;
+.product-left h2 {
+  margin-bottom: 8px;
 }
 
 .product-left p {

@@ -6,6 +6,7 @@ import {
     FiShoppingBag,
     FiCreditCard,
     FiChevronRight,
+    FiList,
 } from "react-icons/fi";
 import "../styles/settings.css";
 import NavBar from "../NavBar";
@@ -27,11 +28,11 @@ const Settings = () => {
             path: "/owner/all-orders",
         },
         {
-            title: "Transactions",
-            subtitle: "Track payments and revenue",
-            icon: <FiCreditCard color="#eac300" />,
-            path: "/transactions",
-        },
+            title: "All Products",
+            subtitle: "Mange the products ",
+            icon: <FiList color="#eac300" />,
+            path: "/owner/all-products"
+        }
     ];
 
 

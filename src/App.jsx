@@ -16,6 +16,7 @@ import Settings from "./screens/adminScreen/Settings";
 import { OwnerProtectedRoute } from "./apis/controller";
 import OrderDetail from "./screens/OrderDetails";
 import AllOrders from "./screens/adminScreen/AllOrders";
+import AllProducts from "./screens/adminScreen/AllProducts";
 
 function App() {
   return (
@@ -58,8 +59,24 @@ function App() {
               }
               />
 
+              <Route path="/owner/all-products" element={
+                <OwnerProtectedRoute>
+                  <AllProducts />
+                </OwnerProtectedRoute>
+              }
+              />
+
               <Route
                 path="/owner/product-create"
+                element={
+                  <OwnerProtectedRoute>
+                    <CreateProduct />
+                  </OwnerProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/owner/edit-product/:id"
                 element={
                   <OwnerProtectedRoute>
                     <CreateProduct />
