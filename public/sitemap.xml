@@ -5,16 +5,4 @@
         <loc>https://apnidukaan-by-rajan.vercel.app/</loc>
     </url>
 
-    <url>
-        <loc>https://apnidukaan-by-rajan.vercel.app/register</loc>
-    </url>
-
-    <url>
-        <loc>https://apnidukaan-by-rajan.vercel.app/cart</loc>
-    </url>
-
-    <url>
-        <loc>https://apnidukaan-by-rajan.vercel.app/login</loc>
-    </url>
-
 </urlset>
