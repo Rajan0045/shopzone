@@ -128,10 +128,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill,
-      minmax(280px, 320px));
-  justify-content: center;
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
   padding: 30px 40px 50px;
 }
 
@@ -156,7 +154,7 @@
 
 .image-wrapper {
   width: 100%;
-  height: 260px;
+  height: 380px;
   overflow: hidden;
   background: #f8fafc;
 }
@@ -169,7 +167,7 @@
 }
 
 .card-body {
-  padding: 22px;
+  padding: 15px;
 }
 
 .brand {
@@ -181,7 +179,7 @@
 .product-title {
   font-size: 22px;
   color: #111827;
-  margin: 12px 0;
+  margin: 5px 0;
   font-weight: 700;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -290,6 +288,10 @@
     grid-template-columns: 1fr;
     padding: 20px;
     gap: 20px;
+  }
+
+  .card {
+    max-width: 100%;
   }
 
   .card-body {

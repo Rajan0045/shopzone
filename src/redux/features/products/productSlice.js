@@ -11,7 +11,7 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (
     {
-      limit = 12,
+      limit = 10,
       skip = 1,
       search = null,
     },
@@ -54,7 +54,7 @@ const productSlice = createSlice({
     error: null,
 
     total: 0,
-    limit: 12,
+    limit: 10,
     currentPage: 1,
     search: "",
   },

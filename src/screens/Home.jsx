@@ -193,7 +193,7 @@ function Home() {
 
       <div className="grid">
         {loading ? (
-          [...Array(8)].map((_, index) => (
+          [...Array(10)].map((_, index) => (
             <ProductSkeleton
               key={index}
             />
@@ -259,9 +259,9 @@ function Home() {
                 </div>
 
                 <div className="card-body">
-                  <p className="brand">
+                  {/* <p className="brand">
                     ShopZone Product
-                  </p>
+                  </p> */}
 
                   <h3 className="product-title">
                     {item.title}
