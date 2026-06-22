@@ -14,6 +14,8 @@ import axios from "axios";
 import { persistor } from "../redux/store";
 import { clearUser } from "../redux/features/user/userSlice";
 import { mainWrapper } from "../apis/main";
+import { FiLogOut, FiUser } from "react-icons/fi";
+import { AiFillSetting } from "react-icons/ai";
 
 const NavBar = ({ productsRef }) => {
   const navigate = useNavigate();
@@ -219,7 +221,7 @@ const NavBar = ({ productsRef }) => {
                       navigate("/profile")
                     }
                   >
-                    👤 Profile
+                  <FiUser color="#f55a00" size={18} /> Profile
                   </div>
 
                   {user?.role === "owner" && (
@@ -229,7 +231,7 @@ const NavBar = ({ productsRef }) => {
                         navigate("/settings")
                       }
                     >
-                      ⚙️ Settings
+                    <AiFillSetting color="#f55a00" size={18} />   Settings
                     </div>
                   )}
 
@@ -237,7 +239,7 @@ const NavBar = ({ productsRef }) => {
                     className="dropdown-item logout-item"
                     onClick={handleLogout}
                   >
-                    🚪 Logout
+                    <FiLogOut color="red" size={18} /> Logout
                   </div>
                 </div>
               )}
