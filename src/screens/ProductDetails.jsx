@@ -46,7 +46,6 @@ function ProductDetails() {
   const handleAddToCart = async () => {
     try {
       setAdding(true);
-
       const res = await mainWrapper.post(`${Constants.URL}/cart/addToCart`,
         {
           _id: product._id,
@@ -72,12 +71,35 @@ function ProductDetails() {
     }
   };
 
+
   if (loading) {
     return (
       <>
         <NavBar />
-        <div className="details-loader">
-          Loading Product...
+
+        <div className="details-container">
+          <div className="details-card">
+            <div className="details-left">
+              <div className="skeleton-image"></div>
+            </div>
+
+            <div className="details-right">
+              <div className="skeleton skeleton-title"></div>
+
+              <div className="price-row">
+                <div className="skeleton skeleton-price"></div>
+                <div className="skeleton skeleton-discount"></div>
+              </div>
+
+              <div className="skeleton skeleton-line"></div>
+              <div className="skeleton skeleton-line"></div>
+              <div className="skeleton skeleton-line short"></div>
+
+              <div className="skeleton skeleton-info"></div>
+
+              <div className="skeleton skeleton-btn"></div>
+            </div>
+          </div>
         </div>
       </>
     );
